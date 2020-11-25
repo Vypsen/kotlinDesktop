@@ -36,8 +36,6 @@ class MPlayer : Application() {
     internal var nowPlaying: trackInfo? = null
 
 
-
-
     override fun start(primaryStage: Stage) {
 
 
