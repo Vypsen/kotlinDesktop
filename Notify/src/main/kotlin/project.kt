@@ -15,13 +15,13 @@ class project: Application(){
 
     override fun start(primaryStage: Stage){
 
-        appsConfig.SetMode(Notify.Mode.IMAGE)
-        appsConfig.conImage.SetTitle("SHREK")
-        appsConfig.conImage.setMessage("Shrek")
-        appsConfig.conImage.SetAppName("shrek")
-        appsConfig.SetPos(Notify.Position.RIGHT_BOTTOM)
-        appsConfig.conImage.SetIconPath("https://avatars.mds.yandex.net/get-zen_doc/758638/pub_5be3111b3907cd00abe9104d_5be3118a817c4c00aa4980e3/scale_1200")
-        appsConfig.conImage.setBorder(Border.CIRCLE)
+        appsConfig.SetMode(Notify.Mode.Input)
+        //appsConfig.conImage.SetTitle("SHREK")
+        appsConfig.setMessage("Napishite chto-nibud")
+        //appsConfig.conImage.SetAppName("shrek")
+        //appsConfig.SetPos(Notify.Position.RIGHT_BOTTOM)
+        //appsConfig.conImage.SetIconPath("https://avatars.mds.yandex.net/get-zen_doc/758638/pub_5be3111b3907cd00abe9104d_5be3118a817c4c00aa4980e3/scale_1200")
+        //appsConfig.conImage.setBorder(Border.CIRCLE)
 
 
         apps.start()

@@ -22,7 +22,6 @@ class ConfigImage{
     var iconBorder = Border.CIRCLE
     var iconPath = ""
     var title = "Title"
-    var msg = "MESSAGE"
     var appName = "app_name"
 
     fun setBorder(iconBorder: Border){
@@ -35,10 +34,6 @@ class ConfigImage{
 
     fun SetTitle(title: String) {
         this.title = title
-    }
-
-    fun setMessage(msg: String){
-        this.msg = msg
     }
 
     fun SetAppName(appName: String){
@@ -79,7 +74,7 @@ class StartConfigImage{
         title.font = Font(24.0)
         title.style = "-fx-font-weight: bold; -fx-text-fill:" + config.textColor
 
-        var message = Label(config.conImage.msg)
+        var message = Label(config.msg)
         message.font = Font(20.0)
         message.style = "-fx-text-fill:" + config.textColor
 

@@ -10,6 +10,7 @@ import javafx.stage.Screen
 import javafx.stage.Stage
 import javafx.stage.StageStyle
 import javafx.util.Duration
+import kotlin.system.exitProcess
 
 class Notify{
 
@@ -36,8 +37,9 @@ class Notify{
         var pos = Position.LEFT_BOTTOM
         var textColor = "#FFFFFF"
         var bgColor = "#000000"
+        var msg = "MESSAGE"
         var bgOpacity = 1.0
-        var waitTime = 3000
+        var waitTime = 5000
         var defWidth = 300.0
         var defHeight = 150.0
         var shift = 10.0
@@ -79,15 +81,15 @@ class Notify{
             this.shift = shift
         }
 
+        fun setMessage(msg: String){
+            this.msg = msg
+        }
+
     }
 
 
     var screenRect = Screen.getPrimary().bounds
     var stage = Stage()
-
-
-
-
 
 
     lateinit var content: Any
@@ -99,6 +101,11 @@ class Notify{
             Mode.IMAGE -> {
                 StartConfigImage().build(config)
                 content = contentImage
+            }
+
+            Mode.Input -> {
+                StartConfigInput().build(config)
+                content = contentInput
             }
         }
 
@@ -125,24 +132,29 @@ class Notify{
             @Throws(InterruptedException::class)
             override fun call(): Void? {
                 Thread.sleep(config.waitTime.toLong())
-                cloaseAnim()
+                cloaseAnim(content)
                 return null
             }
         }
-        Thread(close).start()
+
+
+        stage.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET) {
+            Thread(close).join()
+        }
+
+        stage.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET) {
+            Thread(close).start()
+        }
+
+
 
         stage.scene = Scene(content as Parent?, config.defWidth, config.defHeight)
         stage.initStyle(StageStyle.TRANSPARENT)
         stage.show()
-        openAnim()
-
-        stage.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET) {
-
-        }
-
+        openAnim(content)
 
     }
-    fun openAnim() {
+    fun openAnim(content: Any) {
 
         val ft = TranslateTransition(Duration.millis(2000.0), content as Node?)
 
@@ -159,7 +171,7 @@ class Notify{
         ft.play()
     }
 
-    fun cloaseAnim() {
+    fun cloaseAnim(content: Any) {
         val ft = TranslateTransition(Duration.millis(2000.0), content as Node?)
 
         when (config.pos) {
@@ -173,7 +185,7 @@ class Notify{
             }
         }
         ft.setOnFinished {
-            stage.close()
+            exitProcess(0)
         }
         ft.play()
     }
