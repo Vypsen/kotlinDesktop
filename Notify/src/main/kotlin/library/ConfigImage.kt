@@ -1,6 +1,7 @@
 package library
 
 import javafx.geometry.Insets
+import javafx.geometry.Pos
 import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.layout.HBox
@@ -11,82 +12,57 @@ import javafx.scene.shape.Rectangle
 import javafx.scene.text.Font
 import java.io.File
 
+var configImageMsg = ConfigImageMsg()
+class ConfigImageMsg {
 
-enum class Border {
-    SQUARE,
-    CIRCLE
-}
-
-class ConfigImage{
-
-    var iconBorder = Border.CIRCLE
-    var iconPath = ""
-    var title = "Title"
-    var appName = "app_name"
-
-    fun setBorder(iconBorder: Border){
-        this.iconBorder = iconBorder
+    enum class Border {
+        SQUARE,
+        CIRCLE
     }
 
-    fun SetIconPath(iconPath: String){
-        this.iconPath = iconPath
-    }
-
-    fun SetTitle(title: String) {
-        this.title = title
-    }
-
-    fun SetAppName(appName: String){
-        this.appName = appName
-    }
-
-}
 
 
-var contentImage = HBox()
+    var contentImageMsg = HBox()
 
+    fun build(title: String, message: String, appName: String, image: String, border: Border) {
 
-class StartConfigImage{
+        contentImageMsg.setPadding(Insets(0.0, 0.0, 0.0, 10.0))
+        contentImageMsg.spacing = 10.0
 
-
-    fun build(config: Notify.Config) {
-
-        contentImage.opacity = config.bgOpacity
-        contentImage.setPadding(Insets(5.0, 5.0, 5.0, 5.0))
-        contentImage.spacing = 10.0
-        contentImage.style = "-fx-background-color:" + config.bgColor
-
-        var path = config.conImage.iconPath
-        if (!config.conImage.iconPath.isEmpty()) {
-            if (config.conImage.iconPath.substring(0, 4) != "http") {
-                path = File(config.conImage.iconPath).toURI().toURL().toString();
+        var path = image
+        if (!image.isEmpty()) {
+            if (image.substring(0, 4) != "http") {
+                path = File(image).toURI().toURL().toString();
             }
-            var icoBorder = if (config.conImage.iconBorder == Border.CIRCLE) {
-                Circle(config.defHeight / 2, config.defHeight / 2, config.defHeight / 2)
+            var image = if (border == Border.CIRCLE) {
+                Circle(notify.defHeight / 6, notify.defHeight / 6, notify.defHeight / 6)
             } else {
-                Rectangle(config.defHeight / 2, config.defHeight / 2, config.defHeight, config.defHeight)
+                Rectangle(notify.defHeight / 8, notify.defHeight / 8, notify.defHeight / 4, notify.defHeight / 4)
             }
-            icoBorder.setFill(ImagePattern(Image(path)))
+            image.setFill(ImagePattern(Image(path)))
 
-            contentImage.children.add(icoBorder)
+            contentImageMsg.children.add(image)
         }
 
 
         var msgLayout = VBox()
 
-        var title = Label(config.conImage.title)
-        title.font = Font(24.0)
-        title.style = "-fx-font-weight: bold; -fx-text-fill:" + config.textColor
+        var Title = Label(title)
+        Title.font = Font(22.0)
+        Title.style = "-fx-font-weight: bold; -fx-text-fill:" + notify.textColor
 
-        var message = Label(config.msg)
-        message.font = Font(20.0)
-        message.style = "-fx-text-fill:" + config.textColor
+        var Message = Label(message)
+        Message.font = Font(17.0)
+        Message.style = "-fx-text-fill:" + notify.textColor
 
-        var app = Label(config.conImage.appName)
-        app.font = Font(16.0)
-        app.style = "-fx-text-fill:" + config.textColor
+        var AppName = Label(appName)
+        AppName.font = Font(10.0)
+        AppName.style = "-fx-text-fill:" + notify.textColor
 
-        msgLayout.children.addAll(title, message, app)
-        contentImage.children.add(msgLayout)
+
+        msgLayout.alignment = Pos.TOP_LEFT
+        msgLayout.children.addAll(Title, Message, AppName)
+        contentImageMsg.children.add(msgLayout)
+
     }
 }
