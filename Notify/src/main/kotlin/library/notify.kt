@@ -30,6 +30,7 @@ import java.io.File
 import kotlin.system.exitProcess
 
 
+var sumHeight = 0
 var notify = Notify()
 class Notify{
 
@@ -55,11 +56,13 @@ class Notify{
     var bgOpacity = 0.9
     var waitTime = 5000
     var defWidth = 300.0
-    var defHeight = 170.0
+    var defHeight = 160.0
     var shift = 10.0
 
+    //выпадающий список
     var list: ObservableList<String?>? = FXCollections.observableArrayList("first", "second", "third")
     var comboBox = ComboBox(list)
+    //элемент ввода
     var textField: TextField? = null
 
     var buttonOk = Button("Ok")
@@ -130,12 +133,14 @@ class Notify{
             }
             Border.setFill(ImagePattern(Image(path)))
             content.children.add(Border)
+            sumHeight += 40
         }
     }
 
     fun setImageMsg(title: String = "title", message: String = "message", appName: String = "appName", image: String, border: ConfigImageMsg.Border = ConfigImageMsg.Border.CIRCLE){
         configImageMsg.build(title, message, appName, image, border)
         content.children.add(configImageMsg.contentImageMsg)
+        sumHeight += 80
 
     }
 
@@ -145,6 +150,7 @@ class Notify{
         title.style = "-fx-font-weight: bold; -fx-text-fill:" + textColor
 
         content.children.add(title)
+        sumHeight += 25
     }
 
 
@@ -154,6 +160,7 @@ class Notify{
         message.style = "-fx-text-fill:" + textColor
 
         content.children.add(message)
+        sumHeight += 18
     }
 
 
@@ -166,6 +173,7 @@ class Notify{
         textField?.alignment = Pos.BASELINE_CENTER
 
         content.children.add(textField)
+        sumHeight += 30
     }
 
     fun setButtons(){
@@ -188,11 +196,13 @@ class Notify{
 
 
         content.children.add(HboxButtons)
+        sumHeight += 30
 
     }
 
     fun setComboBox(){
         content.children.add(comboBox)
+        sumHeight += 20
     }
 
 
@@ -254,12 +264,14 @@ class Notify{
         }
 
 
+        content.padding = Insets(7.0)
         content.style = "-fx-background-color:" + bgColor
         content.opacity = bgOpacity
         content.alignment = Pos.BASELINE_CENTER
         content.spacing = 7.0
 
-        var scene = Scene(content, defWidth, defHeight)
+        defHeight = (sumHeight + 37).toDouble()
+        var scene = Scene(content, defWidth,defHeight)
         scene.fill = Color.TRANSPARENT
 
         stage.scene = scene
