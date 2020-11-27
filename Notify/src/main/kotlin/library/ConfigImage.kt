@@ -45,9 +45,13 @@ class ConfigImage{
 
 var contentImage = HBox()
 
+
 class StartConfigImage{
 
+
     fun build(config: Notify.Config) {
+
+        contentImage.opacity = config.bgOpacity
         contentImage.setPadding(Insets(5.0, 5.0, 5.0, 5.0))
         contentImage.spacing = 10.0
         contentImage.style = "-fx-background-color:" + config.bgColor

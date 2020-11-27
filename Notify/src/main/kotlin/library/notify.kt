@@ -6,17 +6,22 @@ import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.input.MouseEvent
+import javafx.scene.media.Media
+import javafx.scene.media.MediaPlayer
+import javafx.scene.paint.Color
 import javafx.stage.Screen
 import javafx.stage.Stage
 import javafx.stage.StageStyle
 import javafx.util.Duration
+import java.io.File
 import kotlin.system.exitProcess
+
 
 class Notify{
 
    enum class Mode{
        IMAGE,
-       Input
+       INPUT
    }
 
     enum class Position {
@@ -31,19 +36,18 @@ class Notify{
 
     class Config{
 
-
         var conImage = ConfigImage()
+        var conInput = ConfigInput()
         var mode = Mode.IMAGE
         var pos = Position.LEFT_BOTTOM
         var textColor = "#FFFFFF"
-        var bgColor = "#000000"
+        var bgColor = "#222222"
         var msg = "MESSAGE"
-        var bgOpacity = 1.0
+        var bgOpacity = 0.9
         var waitTime = 5000
         var defWidth = 300.0
-        var defHeight = 150.0
+        var defHeight = 170.0
         var shift = 10.0
-
 
         fun SetMode(mode: Mode){
             this.mode = mode
@@ -85,6 +89,7 @@ class Notify{
             this.msg = msg
         }
 
+
     }
 
 
@@ -92,10 +97,12 @@ class Notify{
     var stage = Stage()
 
 
+
+
+
     lateinit var content: Any
 
     fun start() {
-
 
         when(config.mode) {
             Mode.IMAGE -> {
@@ -103,13 +110,14 @@ class Notify{
                 content = contentImage
             }
 
-            Mode.Input -> {
+            Mode.INPUT -> {
                 StartConfigInput().build(config)
                 content = contentInput
             }
         }
 
-        when (config.pos) {
+
+                when (config.pos) {
             Position.LEFT_BOTTOM -> {
                 stage.x = config.shift
                 stage.y = screenRect.height - config.defHeight - config.shift
@@ -132,10 +140,11 @@ class Notify{
             @Throws(InterruptedException::class)
             override fun call(): Void? {
                 Thread.sleep(config.waitTime.toLong())
-                cloaseAnim(content)
+                closeAnim(content, config)
                 return null
             }
         }
+
 
 
         stage.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET) {
@@ -146,17 +155,27 @@ class Notify{
             Thread(close).start()
         }
 
+        var scene = Scene(content as Parent?, config.defWidth, config.defHeight)
+        scene.setFill(Color.TRANSPARENT)
 
-
-        stage.scene = Scene(content as Parent?, config.defWidth, config.defHeight)
+        stage.scene = scene
         stage.initStyle(StageStyle.TRANSPARENT)
+
         stage.show()
         openAnim(content)
 
     }
     fun openAnim(content: Any) {
 
-        val ft = TranslateTransition(Duration.millis(2000.0), content as Node?)
+
+
+        //val musicFile = "https://wav-library.net/sounds/icq/icq_aska_zvuk_mp3_skachat/176-1-0-5952.mp3"
+        //val sound = Media(File(musicFile).toURI().toString())
+        //val mediaPlayer = MediaPlayer(sound)
+        //mediaPlayer.play()
+
+
+        val ft = TranslateTransition(Duration.millis(1000.0), content as Node?)
 
         when (config.pos) {
             Position.LEFT_BOTTOM, Position.LEFT_TOP -> {
@@ -171,8 +190,8 @@ class Notify{
         ft.play()
     }
 
-    fun cloaseAnim(content: Any) {
-        val ft = TranslateTransition(Duration.millis(2000.0), content as Node?)
+    fun closeAnim(content: Any, config: Config) {
+        val ft = TranslateTransition(Duration.millis(1000.0), content as Node?)
 
         when (config.pos) {
             Position.LEFT_BOTTOM, Position.LEFT_TOP -> {
@@ -190,3 +209,4 @@ class Notify{
         ft.play()
     }
 }
+

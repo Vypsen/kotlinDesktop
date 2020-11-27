@@ -1,6 +1,4 @@
 package library
-
-import com.jfoenix.converters.ButtonTypeConverter
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.Button
@@ -21,41 +19,52 @@ class ConfigInput{
 }
 
 var configInput = ConfigInput()
+
 class StartConfigInput{
     fun build(config: Notify.Config){
         contentInput.style = "-fx-background-color:" + config.bgColor
 
 
         contentInput.setPadding(Insets(15.0, 5.0, 5.0, 5.0))
-        contentInput.spacing = 25.0
+        contentInput.spacing = 15.0
 
         var message = Label(config.msg)
         message.font = Font(20.0)
         message.style = "-fx-text-fill:" + config.textColor
 
         val textField = TextField()
+        textField.minHeight = 40.0
         textField.alignment = Pos.BASELINE_CENTER
+        textField.font = Font(20.0)
 
         var HboxButtons = HBox()
-        configInput.buttonOk.style = "-fx-background-color:" + configInput.colorButton;  "-fx-text-fill:" + config.textColor
+
+        configInput.buttonOk.style = "-fx-background-color:" + configInput.colorButton;  "-fx-text-fill:" + config.textColor;
+        configInput.buttonOk.minHeight = 40.0
+        configInput.buttonOk.minWidth = 125.0
+
         configInput.buttonCancel.style = "-fx-background-color:" + configInput.colorButton; "-fx-text-fill:" + config.textColor
-        configInput
+        configInput.buttonCancel.minHeight = 40.0
+        configInput.buttonCancel.minWidth = 125.0
+        configInput.buttonCancel.text
+
+
+
         HboxButtons.children.addAll(configInput.buttonOk, configInput.buttonCancel)
         HboxButtons.alignment = Pos.BASELINE_CENTER
-        HboxButtons.spacing = 40.0
+        HboxButtons.spacing = 30.0
 
         configInput.buttonOk.setOnAction {
             println(textField.text)
-            Notify().cloaseAnim(contentInput)
+            Notify().closeAnim(contentInput, config)
         }
 
         configInput.buttonCancel.setOnAction {
-            Notify().cloaseAnim(contentInput)
+            Notify().closeAnim(contentInput, config)
         }
 
 
         contentInput.children.addAll(message, textField, HboxButtons)
-
 
     }
 }
