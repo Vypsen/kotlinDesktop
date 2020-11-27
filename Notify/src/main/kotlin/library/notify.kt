@@ -1,23 +1,22 @@
 package library
 
 import javafx.animation.TranslateTransition
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import javafx.concurrent.Task
 import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.scene.Node
-import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.Button
+import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.image.Image
-import javafx.scene.input.MouseEvent
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
-import javafx.scene.media.Media
-import javafx.scene.media.MediaPlayer
 import javafx.scene.paint.Color
 import javafx.scene.paint.ImagePattern
+import javafx.scene.paint.Paint
 import javafx.scene.shape.Circle
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Font
@@ -51,16 +50,19 @@ class Notify{
     var textColor = "#FFFFFF"
     var bgColor = "#222222"
     var msg = "MESSAGE"
-    var bgOpacity = 0.9
+    var bgOpacity = 1.0
     var waitTime = 5000
     var defWidth = 300.0
     var defHeight = 170.0
     var shift = 10.0
+
+    var list: ObservableList<String?>? = FXCollections.observableArrayList("first", "second", "third")
+    var comboBox = ComboBox(list)
     var textField: TextField? = null
 
-    var buttonOk = Button("Сдаться")
-    var buttonCancel = Button("Самоубийство")
-    var colorButton = "#FFFFFF"
+    var buttonOk = Button("Ok")
+    var buttonCancel = Button("Cancel")
+    var colorButton = "#999999"
 
     var iconBorder = Border.SQUARE
     var iconPath = ""
@@ -74,29 +76,6 @@ class Notify{
 
     fun SetIconPath(iconPath: String){
         this.iconPath = iconPath
-    }
-
-
-    fun setImage(image: String){
-        var path = image
-        if (!image.isEmpty()) {
-            if (image.substring(0, 4) != "http") {
-                path = File(iconPath).toURI().toURL().toString();
-            }
-            var Border = if (iconBorder == Border.CIRCLE) {
-                Circle(defHeight / 2, defHeight / 2, defHeight / 2)
-            } else {
-                Rectangle(defHeight / 2, defHeight / 2, defHeight, defHeight)
-            }
-            Border.setFill(ImagePattern(Image(path)))
-            content.children.add(Border)
-        }
-    }
-
-    fun setImageMsg(title: String = "title", message: String = "message", appName: String = "appName", image: String, border: ConfigImageMsg.Border = ConfigImageMsg.Border.CIRCLE){
-        configImageMsg.build(title, message, appName, image, border)
-        content.children.add(configImageMsg.contentImageMsg)
-
     }
 
     fun SetPos(pos: Position) {
@@ -132,6 +111,28 @@ class Notify{
     }
 
 
+    fun setImage(image: String){
+        var path = image
+        if (!image.isEmpty()) {
+            if (image.substring(0, 4) != "http") {
+                path = File(iconPath).toURI().toURL().toString();
+            }
+            var Border = if (iconBorder == Border.CIRCLE) {
+                Circle(defHeight / 4, defHeight / 4, defHeight / 4)
+            } else {
+                Rectangle(defHeight , defHeight / 2)
+            }
+            Border.setFill(ImagePattern(Image(path)))
+            content.children.add(Border)
+        }
+    }
+
+    fun setImageMsg(title: String = "title", message: String = "message", appName: String = "appName", image: String, border: ConfigImageMsg.Border = ConfigImageMsg.Border.CIRCLE){
+        configImageMsg.build(title, message, appName, image, border)
+        content.children.add(configImageMsg.contentImageMsg)
+
+    }
+
     fun SetTitle(title: String) {
         var title = Label(titleNotify)
         title.font = Font(24.0)
@@ -155,9 +156,8 @@ class Notify{
         textField?.minHeight = 30.0
         textField?.maxWidth = 250.0
 
-        textField?.alignment = Pos.BASELINE_CENTER
-        content.alignment = Pos.BASELINE_CENTER
         textField?.font = Font(15.0)
+        textField?.alignment = Pos.BASELINE_CENTER
 
         content.children.add(textField)
     }
@@ -165,11 +165,13 @@ class Notify{
     fun setButtons(){
         var HboxButtons = HBox()
 
-        buttonOk.style = "-fx-background-color:" + colorButton;  "-fx-text-fill:" + textColor;
+        buttonOk.textFill = Paint.valueOf("#FFFFFF")
+        buttonOk.style = "-fx-background-color: " + colorButton
         buttonOk.minHeight = 25.0
         buttonOk.minWidth = 100.0
 
-        buttonCancel.style = "-fx-background-color:" + colorButton; "-fx-text-fill:" + textColor
+        buttonCancel.textFill = Paint.valueOf("#FFFFFF")
+        buttonCancel.style = "-fx-background-color :" + colorButton
         buttonCancel.minHeight = 25.0
         buttonCancel.minWidth = 100.0
 
@@ -182,6 +184,10 @@ class Notify{
 
         content.children.add(HboxButtons)
 
+    }
+
+    fun setComboBox(){
+        content.children.add(comboBox)
     }
 
 
@@ -204,7 +210,7 @@ class Notify{
                 stage.y = screenRect.height - defHeight - shift
             }
             Position.RIGHT_TOP -> {
-                stage.x = screenRect.width -defWidth - shift
+                stage.x = screenRect.width - defWidth - shift
                 stage.y = shift
             }
         }
@@ -229,20 +235,26 @@ class Notify{
         //}
 
         buttonOk.setOnAction {
-            println(textField?.text)
+            if(textField != null){
+                println(textField?.text)
+            }
+            else{
+                println(comboBox.selectionModel.selectedItem)
+            }
             closeAnim()
         }
 
-        configInput.buttonCancel.setOnAction {
+        buttonCancel.setOnAction {
             closeAnim()
         }
 
 
         content.style = "-fx-background-color:" + bgColor
-
+        content.opacity = bgOpacity
         content.setPadding(Insets(10.0, 0.0, 0.0, 0.0))
+        content.alignment = Pos.BASELINE_CENTER
 
-        var scene = Scene(content , defWidth, defHeight)
+        var scene = Scene(content, defWidth, defHeight)
         scene.setFill(Color.TRANSPARENT)
 
         stage.scene = scene
@@ -295,4 +307,7 @@ class Notify{
         ft.play()
     }
 }
+
+
+
 

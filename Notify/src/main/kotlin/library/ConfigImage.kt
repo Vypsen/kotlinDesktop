@@ -53,11 +53,11 @@ class ConfigImageMsg {
 
         var Message = Label(message)
         Message.font = Font(17.0)
-        Message.style = "-fx-text-fill:" + notify.textColor
+        Message.style = "-fx-text-fill: #AAAAAA"
 
         var AppName = Label(appName)
         AppName.font = Font(10.0)
-        AppName.style = "-fx-text-fill:" + notify.textColor
+        AppName.style = "-fx-text-fill: #AAAAAA"
 
 
         msgLayout.alignment = Pos.TOP_LEFT
