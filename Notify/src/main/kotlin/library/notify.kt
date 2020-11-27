@@ -14,6 +14,8 @@ import javafx.scene.control.TextField
 import javafx.scene.image.Image
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
+import javafx.scene.media.Media
+import javafx.scene.media.MediaPlayer
 import javafx.scene.paint.Color
 import javafx.scene.paint.ImagePattern
 import javafx.scene.paint.Paint
@@ -50,7 +52,7 @@ class Notify{
     var textColor = "#FFFFFF"
     var bgColor = "#222222"
     var msg = "MESSAGE"
-    var bgOpacity = 1.0
+    var bgOpacity = 0.9
     var waitTime = 5000
     var defWidth = 300.0
     var defHeight = 170.0
@@ -67,6 +69,10 @@ class Notify{
     var iconBorder = Border.SQUARE
     var iconPath = ""
     var titleNotify = "Title"
+
+    val musicFile = "src\\main\\resources\\z_uk-aska-z_uk.mp3"
+    val sound = Media(File(musicFile).toURI().toString())
+    val mediaPlayer = MediaPlayer(sound)
 
 
 
@@ -179,7 +185,6 @@ class Notify{
 
         HboxButtons.alignment = Pos.BASELINE_CENTER
         HboxButtons.spacing = 35.0
-        HboxButtons.padding = Insets(5.0)
 
 
         content.children.add(HboxButtons)
@@ -251,11 +256,11 @@ class Notify{
 
         content.style = "-fx-background-color:" + bgColor
         content.opacity = bgOpacity
-        content.setPadding(Insets(10.0, 0.0, 0.0, 0.0))
         content.alignment = Pos.BASELINE_CENTER
+        content.spacing = 7.0
 
         var scene = Scene(content, defWidth, defHeight)
-        scene.setFill(Color.TRANSPARENT)
+        scene.fill = Color.TRANSPARENT
 
         stage.scene = scene
         stage.initStyle(StageStyle.TRANSPARENT)
@@ -263,17 +268,16 @@ class Notify{
         stage.show()
         openAnim()
 
+
+
+
     }
     fun openAnim() {
 
 
-        //val musicFile = "https://wav-library.net/sounds/icq/icq_aska_zvuk_mp3_skachat/176-1-0-5952.mp3"
-        //val sound = Media(File(musicFile).toURI().toString())
-        //val mediaPlayer = MediaPlayer(sound)
-        //mediaPlayer.play()
+        mediaPlayer.play()
 
-
-        val ft = TranslateTransition(Duration.millis(1000.0), content)
+        val ft = TranslateTransition(Duration.millis(500.0), content)
 
         when (pos) {
             Position.LEFT_BOTTOM, Position.LEFT_TOP -> {
@@ -289,6 +293,7 @@ class Notify{
     }
 
     fun closeAnim() {
+
         val ft = TranslateTransition(Duration.millis(1000.0), content)
 
         when (pos) {

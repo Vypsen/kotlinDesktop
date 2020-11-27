@@ -26,8 +26,8 @@ class ConfigImageMsg {
 
     fun build(title: String, message: String, appName: String, image: String, border: Border) {
 
-        contentImageMsg.setPadding(Insets(0.0, 0.0, 0.0, 10.0))
-        contentImageMsg.spacing = 10.0
+        contentImageMsg.setPadding(Insets(10.0, 0.0, 0.0, 10.0))
+        contentImageMsg.spacing = 15.0
 
         var path = image
         if (!image.isEmpty()) {
@@ -60,9 +60,10 @@ class ConfigImageMsg {
         AppName.style = "-fx-text-fill: #AAAAAA"
 
 
-        msgLayout.alignment = Pos.TOP_LEFT
+        //msgLayout.alignment = Pos.TOP_LEFT
         msgLayout.children.addAll(Title, Message, AppName)
         contentImageMsg.children.add(msgLayout)
+        contentImageMsg.alignment = Pos.BOTTOM_LEFT
 
     }
 }
