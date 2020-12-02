@@ -26,7 +26,7 @@ class ConfigImageMsg {
 
     fun build(title: String, message: String, appName: String, image: String, border: Border) {
 
-        contentImageMsg.setPadding(Insets(7.0, 0.0, 0.0, 10.0))
+        contentImageMsg.setPadding(Insets(3.0, 0.0, 0.0, 0.0))
         contentImageMsg.spacing = 10.0
 
         var path = image
@@ -48,7 +48,7 @@ class ConfigImageMsg {
         var msgLayout = VBox()
 
         var Title = Label(title)
-        Title.font = Font(22.0)
+        Title.font = Font(20.0)
         Title.style = "-fx-font-weight: bold; -fx-text-fill:" + notify.textColor
 
         var Message = Label(message)
@@ -60,7 +60,6 @@ class ConfigImageMsg {
         AppName.style = "-fx-text-fill: #AAAAAA"
 
 
-        //msgLayout.alignment = Pos.TOP_LEFT
         msgLayout.children.addAll(Title, Message, AppName)
         contentImageMsg.children.add(msgLayout)
         contentImageMsg.alignment = Pos.TOP_LEFT

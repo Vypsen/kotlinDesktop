@@ -1,26 +1,38 @@
 import javafx.application.Application
+import javafx.scene.Scene
+import javafx.scene.control.Button
 import javafx.stage.Stage
 import library.ConfigImageMsg
 import library.Notify
 
 class project: Application(){
 
-    var apps = Notify()
 
     override fun start(primaryStage: Stage){
 
 
 
+        var apps = Notify()
         //apps.setImage("https://avatars.mds.yandex.net/get-zen_doc/758638/pub_5be3111b3907cd00abe9104d_5be3118a817c4c00aa4980e3/scale_1200")
         apps.setImageMsg("Shrek", "Shrek", "app", "https://avatars.mds.yandex.net/get-zen_doc/758638/pub_5be3111b3907cd00abe9104d_5be3118a817c4c00aa4980e3/scale_1200", ConfigImageMsg.Border.CIRCLE)
         //apps.setMessage("Сообщение ")
-        apps.SetPos(Notify.Position.RIGHT_BOTTOM)
-        //apps.setTextField()
-        //apps.setButtons()
+        apps.SetPos(Notify.Position.RIGHT_TOP)
+        apps.setTextField()
+        apps.setButtons()
         //apps.setMessage("weqweqweqweqweqwe")
         //apps.setComboBox()
-        apps.setButtons()
-        apps.start()
+        //apps.setButtons()
+
+
+
+
+        var button = Button("Нажми")
+        button.setOnAction {
+            apps.start()
+        }
+        primaryStage.scene = Scene(button, 100.0, 100.0)
+        primaryStage.show()
+
 
     }
 

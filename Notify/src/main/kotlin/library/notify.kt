@@ -12,6 +12,7 @@ import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.image.Image
+import javafx.scene.input.MouseEvent
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import javafx.scene.media.Media
@@ -30,8 +31,9 @@ import java.io.File
 import kotlin.system.exitProcess
 
 
-var sumHeight = 0
+var sumHeight = 0.0
 var notify = Notify()
+@Suppress("UNREACHABLE_CODE")
 class Notify{
 
     enum class Border {
@@ -57,7 +59,7 @@ class Notify{
     var waitTime = 5000
     var defWidth = 300.0
     var defHeight = 160.0
-    var shift = 10.0
+    var shift = 30.0
 
     //выпадающий список
     var list: ObservableList<String?>? = FXCollections.observableArrayList("first", "second", "third")
@@ -120,6 +122,9 @@ class Notify{
     }
 
 
+    //fun setActionButton()
+
+
     fun setImage(image: String){
         var path = image
         if (!image.isEmpty()) {
@@ -133,7 +138,9 @@ class Notify{
             }
             Border.setFill(ImagePattern(Image(path)))
             content.children.add(Border)
-            sumHeight += 40
+
+            sumHeight += defHeight
+
         }
     }
 
@@ -150,7 +157,7 @@ class Notify{
         title.style = "-fx-font-weight: bold; -fx-text-fill:" + textColor
 
         content.children.add(title)
-        sumHeight += 25
+        sumHeight += 24
     }
 
 
@@ -160,17 +167,19 @@ class Notify{
         message.style = "-fx-text-fill:" + textColor
 
         content.children.add(message)
-        sumHeight += 18
+        sumHeight += 17
     }
 
 
     fun setTextField(){
         textField = TextField()
+
         textField?.minHeight = 30.0
         textField?.maxWidth = 250.0
 
         textField?.font = Font(15.0)
         textField?.alignment = Pos.BASELINE_CENTER
+
 
         content.children.add(textField)
         sumHeight += 30
@@ -202,7 +211,7 @@ class Notify{
 
     fun setComboBox(){
         content.children.add(comboBox)
-        sumHeight += 20
+        sumHeight += comboBox.height
     }
 
 
@@ -234,20 +243,33 @@ class Notify{
             @Throws(InterruptedException::class)
             override fun call(): Void? {
                 Thread.sleep(waitTime.toLong())
-                //closeAnim()
+                closeAnim()
                 return null
             }
         }
 
 
+        var flag = true
 
-       // stage.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET) {
-         //   Thread(close).join()
-        //}
 
-        //stage.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET) {
-          //  Thread(close).start()
-        //}
+
+        stage.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET) {
+            flag = false
+        }
+
+        stage.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET) {
+            flag = true
+        }
+
+        while (flag) {
+
+            try {
+
+            }
+            catch (){
+
+            }
+        }
 
         buttonOk.setOnAction {
             if(textField != null){
@@ -264,14 +286,13 @@ class Notify{
         }
 
 
-        content.padding = Insets(7.0)
+        content.padding = Insets(5.0)
         content.style = "-fx-background-color:" + bgColor
         content.opacity = bgOpacity
         content.alignment = Pos.BASELINE_CENTER
-        content.spacing = 7.0
+        content.spacing = 10.0
 
-        defHeight = (sumHeight + 37).toDouble()
-        var scene = Scene(content, defWidth,defHeight)
+        var scene = Scene(content, defWidth, sumHeight + content.spacing*2 + 10)
         scene.fill = Color.TRANSPARENT
 
         stage.scene = scene
@@ -279,11 +300,9 @@ class Notify{
 
         stage.show()
         openAnim()
-
-
-
-
+        
     }
+
     fun openAnim() {
 
 
