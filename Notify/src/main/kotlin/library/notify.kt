@@ -1,5 +1,6 @@
 package library
 
+import javafx.animation.ScaleTransition
 import javafx.animation.TranslateTransition
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
@@ -33,7 +34,6 @@ import kotlin.system.exitProcess
 
 var sumHeight = 0.0
 var notify = Notify()
-@Suppress("UNREACHABLE_CODE")
 class Notify{
 
     enum class Border {
@@ -56,7 +56,7 @@ class Notify{
     var bgColor = "#222222"
     var msg = "MESSAGE"
     var bgOpacity = 0.9
-    var waitTime = 5000
+    var waitTime = 9000
     var defWidth = 300.0
     var defHeight = 160.0
     var shift = 30.0
@@ -79,16 +79,13 @@ class Notify{
     val sound = Media(File(musicFile).toURI().toString())
     val mediaPlayer = MediaPlayer(sound)
 
-
-
+    //форма изображения
     fun setBorder(iconBorder: Border){
         this.iconBorder = iconBorder
     }
 
-    fun SetIconPath(iconPath: String){
-        this.iconPath = iconPath
-    }
 
+    //расположение на экране
     fun SetPos(pos: Position) {
         this.pos = pos
     }
@@ -97,34 +94,39 @@ class Notify{
         this.textColor = textColor
     }
 
+    //цвет окна
     fun SetBgColor(bgColor: String){
         this.bgColor = bgColor
     }
 
+    //прозрачность
     fun SetBgOpacity(bgOpacity: Double){
         this.bgOpacity = bgOpacity
     }
 
+    //время ожидания
     fun SetWaitTime(waitTime: Int){
         this.waitTime = waitTime
     }
 
+    //ширина
     fun setWidth(defWidth: Double){
         this.defWidth = defWidth
     }
 
+    //высота
     fun setHeight(defHeight: Double){
         this.defHeight = defHeight
     }
 
+    //отступ
     fun SetShift(shift: Double){
         this.shift = shift
     }
 
 
-    //fun setActionButton()
 
-
+    //вставить изображение
     fun setImage(image: String){
         var path = image
         if (!image.isEmpty()) {
@@ -139,11 +141,12 @@ class Notify{
             Border.setFill(ImagePattern(Image(path)))
             content.children.add(Border)
 
-            sumHeight += defHeight
+            sumHeight += defHeight/2
 
         }
     }
 
+    //вставить контент из другого файла
     fun setImageMsg(title: String = "title", message: String = "message", appName: String = "appName", image: String, border: ConfigImageMsg.Border = ConfigImageMsg.Border.CIRCLE){
         configImageMsg.build(title, message, appName, image, border)
         content.children.add(configImageMsg.contentImageMsg)
@@ -151,6 +154,7 @@ class Notify{
 
     }
 
+    //установить заголовок
     fun SetTitle(title: String) {
         var title = Label(titleNotify)
         title.font = Font(24.0)
@@ -161,6 +165,7 @@ class Notify{
     }
 
 
+    //вставить сообщение
     fun setMessage(msg: String){
         var message = Label(msg)
         message.font = Font(17.0)
@@ -171,6 +176,7 @@ class Notify{
     }
 
 
+    //вставить поле для ввода
     fun setTextField(){
         textField = TextField()
 
@@ -185,6 +191,7 @@ class Notify{
         sumHeight += 30
     }
 
+    //вставить кнопки
     fun setButtons(){
         var HboxButtons = HBox()
 
@@ -209,9 +216,18 @@ class Notify{
 
     }
 
+    //выпадающий список
     fun setComboBox(){
         content.children.add(comboBox)
         sumHeight += comboBox.height
+    }
+
+    fun setPressed(flag: Boolean){
+        if (flag)
+            stage.addEventFilter(MouseEvent.MOUSE_PRESSED){
+                closeAnim()
+            }
+
     }
 
 
@@ -247,30 +263,15 @@ class Notify{
                 return null
             }
         }
+        Thread(close).start()
 
 
-        var flag = true
 
 
 
-        stage.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET) {
-            flag = false
-        }
 
-        stage.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET) {
-            flag = true
-        }
 
-        while (flag) {
-
-            try {
-
-            }
-            catch (){
-
-            }
-        }
-
+        //эвенты на кнопки
         buttonOk.setOnAction {
             if(textField != null){
                 println(textField?.text)
@@ -320,12 +321,19 @@ class Notify{
                 ft.toX = 0.0
             }
         }
+        val scale = ScaleTransition(Duration.millis(500.0), content)
+        scale.fromX = 0.5
+        scale.fromY = 0.5
+        scale.toX = 1.0
+        scale.toY = 1.0
+
+        scale.play()
         ft.play()
     }
 
     fun closeAnim() {
 
-        val ft = TranslateTransition(Duration.millis(1000.0), content)
+        val ft = TranslateTransition(Duration.millis(100.0), content)
 
         when (pos) {
             Position.LEFT_BOTTOM, Position.LEFT_TOP -> {
@@ -338,8 +346,17 @@ class Notify{
             }
         }
         ft.setOnFinished {
-            exitProcess(0)
+            stage.close()
         }
+
+        val scale = ScaleTransition(Duration.millis(50.0), content)
+        scale.fromX = 1.0
+        scale.fromY = 1.0
+        scale.toX = 0.5
+        scale.toY = 0.5
+
+
+        scale.play()
         ft.play()
     }
 }
