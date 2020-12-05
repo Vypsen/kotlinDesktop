@@ -61,9 +61,10 @@ class Notify{
     var defHeight = 160.0
     var shift = 30.0
 
-    //выпадающий список
-    var list: ObservableList<String?>? = FXCollections.observableArrayList("first", "second", "third")
+
+    var list: ObservableList<String?>? = FXCollections.observableArrayList()
     var comboBox = ComboBox(list)
+
     //элемент ввода
     var textField: TextField? = null
 
@@ -207,8 +208,9 @@ class Notify{
 
         HboxButtons.children.addAll(buttonOk, buttonCancel)
 
-        HboxButtons.alignment = Pos.BASELINE_CENTER
+        HboxButtons.alignment = Pos.CENTER
         HboxButtons.spacing = 35.0
+
 
 
         content.children.add(HboxButtons)
@@ -219,7 +221,7 @@ class Notify{
     //выпадающий список
     fun setComboBox(){
         content.children.add(comboBox)
-        sumHeight += comboBox.height
+        sumHeight += 30
     }
 
     fun setPressed(flag: Boolean){
@@ -259,7 +261,7 @@ class Notify{
             @Throws(InterruptedException::class)
             override fun call(): Void? {
                 Thread.sleep(waitTime.toLong())
-                closeAnim()
+                //closeAnim()
                 return null
             }
         }
@@ -272,7 +274,7 @@ class Notify{
 
 
         //эвенты на кнопки
-        buttonOk.setOnAction {
+        buttonOk.addEventFilter(MouseEvent.MOUSE_PRESSED){
             if(textField != null){
                 println(textField?.text)
             }
@@ -287,10 +289,10 @@ class Notify{
         }
 
 
-        content.padding = Insets(5.0)
+        content.padding = Insets(15.0)
         content.style = "-fx-background-color:" + bgColor
         content.opacity = bgOpacity
-        content.alignment = Pos.BASELINE_CENTER
+        content.alignment = Pos.CENTER
         content.spacing = 10.0
 
         var scene = Scene(content, defWidth, sumHeight + content.spacing*2 + 10)

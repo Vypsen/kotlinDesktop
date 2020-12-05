@@ -10,22 +10,21 @@ class project: Application(){
     override fun start(primaryStage: Stage){
 
         var apps = Notify()
-        apps.setBorder(Notify.Border.SQUARE)
-       // apps.setImage("https://avatars.mds.yandex.net/get-zen_doc/758638/pub_5be3111b3907cd00abe9104d_5be3118a817c4c00aa4980e3/scale_1200")
+        //apps.setBorder(Notify.Border.SQUARE)
+        //apps.setImage("https://avatars.mds.yandex.net/get-zen_doc/758638/pub_5be3111b3907cd00abe9104d_5be3118a817c4c00aa4980e3/scale_1200")
         apps.setImageMsg("Shrek", "Shrek", "app", "https://avatars.mds.yandex.net/get-zen_doc/758638/pub_5be3111b3907cd00abe9104d_5be3118a817c4c00aa4980e3/scale_1200", ConfigImageMsg.Border.SQUARE)
         //apps.setMessage("Сообщение ")
-        apps.setPressed(true)
+        //apps.setPressed(true)
         apps.setTextField()
+        //apps.setComboBox()
+
         apps.setButtons()
         apps.SetPos(Notify.Position.RIGHT_TOP)
 
 
 
 
-        //
-        //apps.setMessage("weqweqweqweqweqwe")
-        //apps.setComboBox()
-        //apps.setButtons()
+
 
 
 

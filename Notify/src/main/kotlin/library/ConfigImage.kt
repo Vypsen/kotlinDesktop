@@ -26,8 +26,8 @@ class ConfigImageMsg {
 
     fun build(title: String, message: String, appName: String, image: String, border: Border) {
 
-        contentImageMsg.setPadding(Insets(3.0, 0.0, 0.0, 0.0))
-        contentImageMsg.spacing = 10.0
+        contentImageMsg.setPadding(Insets(5.0, 5.0, 0.0, 5.0))
+        contentImageMsg.spacing = 30.0
 
         var path = image
         if (!image.isEmpty()) {
@@ -35,9 +35,9 @@ class ConfigImageMsg {
                 path = File(image).toURI().toURL().toString();
             }
             var image = if (border == Border.CIRCLE) {
-                Circle(notify.defHeight / 6, notify.defHeight / 6, notify.defHeight / 6)
+                Circle(notify.defHeight / 3, notify.defHeight / 3, notify.defHeight / 3)
             } else {
-                Rectangle(notify.defHeight / 8, notify.defHeight / 8, notify.defHeight / 4, notify.defHeight / 4)
+                Rectangle(notify.defHeight / 4, notify.defHeight / 4, notify.defHeight / 2, notify.defHeight / 2)
             }
             image.setFill(ImagePattern(Image(path)))
 
