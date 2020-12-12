@@ -2,35 +2,36 @@ import javafx.application.Application
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.stage.Stage
-import library.ConfigImageMsg
-import library.Notify
+import javax.swing.JProgressBar
+import Notify
+
+
+
 
 class project: Application(){
 
     override fun start(primaryStage: Stage){
 
-        var apps = Notify()
+
+
+        var apps = Notify.builder()
+        apps.
+
         //apps.setBorder(Notify.Border.SQUARE)
         //apps.setImage("https://avatars.mds.yandex.net/get-zen_doc/758638/pub_5be3111b3907cd00abe9104d_5be3118a817c4c00aa4980e3/scale_1200")
-        apps.setImageMsg("Shrek", "Shrek", "app", "https://avatars.mds.yandex.net/get-zen_doc/758638/pub_5be3111b3907cd00abe9104d_5be3118a817c4c00aa4980e3/scale_1200", ConfigImageMsg.Border.SQUARE)
+        apps.addImageMsg("Shrek", "Shrek", "app", "https://avatars.mds.yandex.net/get-zen_doc/758638/pub_5be3111b3907cd00abe9104d_5be3118a817c4c00aa4980e3/scale_1200", Notify.Border.SQUARE)
         //apps.setMessage("Сообщение ")
         //apps.setPressed(true)
-        apps.setTextField()
+        apps.addTextField()
         //apps.setComboBox()
 
-        apps.setButtons()
+        apps.addButtons()
         apps.SetPos(Notify.Position.RIGHT_TOP)
-
-
-
-
-
-
 
 
         var button = Button("Нажми")
         button.setOnAction {
-            apps.start()
+            apps.build()
 
         }
 
