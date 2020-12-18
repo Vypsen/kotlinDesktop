@@ -2,8 +2,7 @@ import javafx.application.Application
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.stage.Stage
-import javax.swing.JProgressBar
-import Notify
+import library.Notify
 
 
 
@@ -15,17 +14,18 @@ class project: Application(){
 
 
         var apps = Notify.builder()
-        apps.
 
-        //apps.setBorder(Notify.Border.SQUARE)
+
+        //apps.setBorder(library.Notify.Border.SQUARE)
         //apps.setImage("https://avatars.mds.yandex.net/get-zen_doc/758638/pub_5be3111b3907cd00abe9104d_5be3118a817c4c00aa4980e3/scale_1200")
         apps.addImageMsg("Shrek", "Shrek", "app", "https://avatars.mds.yandex.net/get-zen_doc/758638/pub_5be3111b3907cd00abe9104d_5be3118a817c4c00aa4980e3/scale_1200", Notify.Border.SQUARE)
         //apps.setMessage("Сообщение ")
         //apps.setPressed(true)
-        apps.addTextField()
+        //apps.addTextField()
         //apps.setComboBox()
 
-        apps.addButtons()
+        apps.addProgressBar()
+        //apps.addButtons()
         apps.SetPos(Notify.Position.RIGHT_TOP)
 
 

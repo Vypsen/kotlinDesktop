@@ -1,10 +1,10 @@
+package library
+
 import javafx.animation.ScaleTransition
 import javafx.animation.TranslateTransition
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.concurrent.Task
-import javafx.event.ActionEvent
-import javafx.event.EventHandler
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Scene
@@ -29,16 +29,15 @@ import javafx.stage.Stage
 import javafx.stage.StageStyle
 import javafx.util.Duration
 import java.io.File
-import javax.swing.JProgressBar
-import javax.swing.JPanel
-import javafx.scene.control.ProgressIndicator
-
 import javafx.scene.control.ProgressBar
 import javafx.concurrent.WorkerStateEvent
+import javafx.scene.layout.FlowPane
 import javafx.stage.FileChooser
 
 
 class Notify {
+
+
 
     enum class Border {
         SQUARE,
@@ -53,7 +52,11 @@ class Notify {
     }
 
 
+
     class builder {
+
+
+
 
 
         private var content = VBox()
@@ -90,7 +93,11 @@ class Notify {
         private val mediaPlayer = MediaPlayer(sound)
 
         private var HboxButtons = HBox()
-        private val buttonEvent: EventHandler<ActionEvent>? = null
+
+        private var fileChooser = FileChooser()
+        //private var selectedFiles: List<File>? = null
+
+
 
         //форма изображения
         fun setBorder(iconBorder: Border) {
@@ -283,65 +290,61 @@ class Notify {
         }
 
         fun addProgressBar() {
-            val fileChooser = FileChooser()
-            fileChooser.title = "Open File"
 
 
-            val label = Label("Copy files:")
-            val progressBar = ProgressBar()
+            var progressBar = ProgressBar(0.0)
+
+            progressBar.prefWidth = 180.0
+
+
 
             val startButton = Button("Start")
-            val cancelButton = Button("Cancel")
 
             val statusLabel = Label()
-            statusLabel.minWidth = 250.0
-            statusLabel.textFill = Color.BLUE
 
-            // Start Button.
-            // Start Button.
-            startButton.onAction = EventHandler {
-                startButton.isDisable = true
-                progressBar.progress = 0.0
-                cancelButton.isDisable = false
+            statusLabel.minWidth = 250.0
+            statusLabel.textFill = Color.WHITE
+
+            startButton.setOnAction {
+                startButton.isDisable = true;
+                progressBar.progress = 0.0;
+
+                var copyTask = CopyTask();
+
+                //progressBar.progressProperty().unbind()
+                progressBar.progressProperty().bind(copyTask.progressProperty())
+
+                //statusLabel.textProperty().unbind()
+                statusLabel.textProperty().bind(copyTask.messageProperty())
+
+                copyTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED)
+                {
+                    val copied = copyTask.value
+                    statusLabel.textProperty().unbind()
+                    statusLabel.text = "Copied: " + copied.size
+                }
+
+
+
+                Thread(copyTask).start()
             }
 
 
-                startButton.setOnAction {
-                    val selectedFiles: List<File> = fileChooser.showOpenMultipleDialog(stage)
-                }
+            val root = FlowPane()
+            root.children.addAll(progressBar, statusLabel, startButton)
 
-                    // Unbind progress property
-                    progressBar.progressProperty().unbind() 
-
-                    // Bind progress property
-                    progressBar.progressProperty().bind(copyTask.progressProperty())
-
-
-                    // Unbind text property for Label.
-                    statusLabel.textProperty().unbind()
-
-                    // Bind the text property of Label
-                    // with message property of Task
-                    statusLabel.textProperty().bind(copyTask.messageProperty())
-
-                    // When completed tasks
-                    copyTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,  //
-                            EventHandler<WorkerStateEvent?> {
-                                val copied: List<File> = copyTask.getValue()
-                                statusLabel.textProperty().unbind()
-                                statusLabel.text = "Copied: " + copied.size
-                            })
-
-                    // Start the Task.
-                    Thread(copyTask).start()
-
+            content.children.add(root)
+            sumHeight += 80
         }
 
 
 
 
+
+
+
             private var screenRect = Screen.getPrimary().bounds
-            private var stage = Stage()
+            var stage = Stage()
 
             fun build() {
 
@@ -410,7 +413,7 @@ class Notify {
             fun openAnim() {
 
 
-                mediaPlayer.play()
+                //mediaPlayer.play()
 
                 val ft = TranslateTransition(Duration.millis(500.0), content)
 
