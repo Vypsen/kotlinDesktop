@@ -17,9 +17,8 @@ import javafx.scene.input.MouseEvent
 import javafx.util.Duration.seconds
 import kotlin.math.roundToInt
 import javax.sound.sampled.AudioFileFormat
-
-
-
+import kotlin.math.ceil
+import kotlin.math.floor
 
 
 class trackInfo(number: Int, name: String, time: String, uri: String) {
@@ -68,9 +67,6 @@ class MPlayer : Application() {
     private var trackNumber = 1
     private var nowPlaying: trackInfo? = null
     private var mplayer: MediaPlayer? = null
-    private var mplayer1: MediaPlayer? = null
-    private var row: TableRow<trackInfo> = TableRow()
-
 
 
 
@@ -113,7 +109,8 @@ class MPlayer : Application() {
             row.setOnMouseClicked { e ->
                 if (e.clickCount == 2 && !row.isEmpty) {
                     mplayer?.stop()
-                    mplayer = MediaPlayer(Media(row.item.uri))
+                    nowPlaying = row.item
+                    playButton.text = "Play"
                     playClick()
                 }
             }
@@ -127,10 +124,7 @@ class MPlayer : Application() {
 
     private fun playClick() {
         if (playButton.text == "Play") {
-            if (nowPlaying == null) {
-                mplayer = MediaPlayer(Media(data.first().uri))
-                nowPlaying = data.first()
-            }
+            mplayer = MediaPlayer(Media(nowPlaying!!.uri))
             playButton.text = "Pause"
             mplayer?.play()
         }
@@ -170,9 +164,51 @@ class MPlayer : Application() {
         }
     }
 
+    private fun selectClick(){
+        val fileChooser = FileChooser()
+        fileChooser.title = "Open File"
+        fileChooser.extensionFilters.addAll(
+                ExtensionFilter("Audio file", "*.mp3"))
+
+        var window = select.parentPopup.scene.window
+
+        val selectedFiles: List<File> = fileChooser.showOpenMultipleDialog(window)
+
+        curFile = selectedFiles.first()
+        if (curFile != null) {
+            var media: Media?
+            var uri = curFile!!.toURI()
+            media = Media(uri.toString())
+            mplayer = MediaPlayer(media)
+
+
+            slid()
+
+
+            for (curFile in selectedFiles) {
+                var name = curFile.name
+
+                uri = curFile!!.toURI()
+                media = Media(uri.toString())
+                mplayer = MediaPlayer(media)
+
+                var source = mplayer?.media?.source
+                source = source?.substring(0, source.length - ".mp3".length)
 
 
 
+
+                var track = trackInfo(trackNumber, name, "0", curFile!!.toURI().toString())
+                data.add(track)
+                table.items = data
+                trackNumber++
+
+            }
+
+
+        }
+        nowPlaying =  data.first()
+    }
 
 
     private fun slid(){
@@ -203,6 +239,9 @@ class MPlayer : Application() {
                         mplayer?.play()
                     }
 
+
+
+
                 }
                 try {
                     Thread.sleep(300)
@@ -215,45 +254,7 @@ class MPlayer : Application() {
 
     }
 
-    private fun selectClick(){
-        val fileChooser = FileChooser()
-        fileChooser.title = "Open File"
-        fileChooser.extensionFilters.addAll(
-                ExtensionFilter("Audio file", "*.mp3"))
 
-        var window = select.parentPopup.scene.window
-
-        val selectedFiles: List<File> = fileChooser.showOpenMultipleDialog(window)
-
-        curFile = selectedFiles.first()
-        if (curFile != null) {
-            var media: Media?
-            var uri = curFile!!.toURI()
-            media = Media(uri.toString())
-            mplayer = MediaPlayer(media)
-
-            mplayer1 = MediaPlayer(media)
-            slid()
-
-
-            for (curFile in selectedFiles) {
-                var name = curFile.name
-
-                uri = curFile!!.toURI()
-                media = Media(uri.toString())
-                mplayer = MediaPlayer(media)
-                println(mplayer?.totalDuration)
-
-                var track = trackInfo(trackNumber, name, "0", curFile!!.toURI().toString())
-                data.add(track)
-                table.items = data
-                trackNumber++
-
-            }
-
-
-        }
-    }
 
 
     override fun start(primaryStage:Stage) {

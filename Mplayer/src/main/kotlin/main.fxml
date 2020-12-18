@@ -35,7 +35,6 @@
                     </font>
                 </Label>
                 <Pane HBox.hgrow="ALWAYS"/>
-                <Label fx:id="time" text="mm:ss" HBox.hgrow="NEVER"/>
             </HBox>
             <Slider fx:id="sliderDuration" >
                 <VBox.margin>
