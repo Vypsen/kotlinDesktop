@@ -297,8 +297,9 @@ class Notify {
             progressBar.prefWidth = 180.0
 
 
-
             val startButton = Button("Start")
+            val cancelButton = Button("Cancel")
+
 
             val statusLabel = Label()
 
@@ -311,10 +312,8 @@ class Notify {
 
                 var copyTask = CopyTask();
 
-                //progressBar.progressProperty().unbind()
                 progressBar.progressProperty().bind(copyTask.progressProperty())
 
-                //statusLabel.textProperty().unbind()
                 statusLabel.textProperty().bind(copyTask.messageProperty())
 
                 copyTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED)
@@ -329,9 +328,19 @@ class Notify {
                 Thread(copyTask).start()
             }
 
+            cancelButton.setOnAction {
+                closeAnim()
+            }
+
+            val buttons = HBox()
+
+            buttons.children.addAll(startButton, cancelButton)
+
+            buttons.spacing = 20.0
+
 
             val root = FlowPane()
-            root.children.addAll(progressBar, statusLabel, startButton)
+            root.children.addAll(progressBar, statusLabel, buttons)
 
             content.children.add(root)
             sumHeight += 80
@@ -339,12 +348,8 @@ class Notify {
 
 
 
-
-
-
-
             private var screenRect = Screen.getPrimary().bounds
-            var stage = Stage()
+            private var stage = Stage()
 
             fun build() {
 
@@ -410,10 +415,10 @@ class Notify {
 
             }
 
-            fun openAnim() {
+            private fun openAnim() {
 
 
-                //mediaPlayer.play()
+                mediaPlayer.play()
 
                 val ft = TranslateTransition(Duration.millis(500.0), content)
 
@@ -437,7 +442,7 @@ class Notify {
                 ft.play()
             }
 
-            fun closeAnim() {
+            private fun closeAnim() {
 
                 val ft = TranslateTransition(Duration.millis(100.0), content)
 

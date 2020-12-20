@@ -2,6 +2,7 @@ package library
 
 import javafx.concurrent.Task
 import javafx.stage.FileChooser
+import javafx.stage.Stage
 import java.io.File
 import java.lang.Exception
 import java.util.ArrayList
@@ -11,7 +12,8 @@ import java.util.ArrayList
 class CopyTask : Task<List<File>>() {
 
 
-    var st = Notify.builder().stage
+
+    var st = Stage()
     val fileChooser = FileChooser()
     var selectedFiles: MutableList<File> = fileChooser.showOpenMultipleDialog(st)
 
