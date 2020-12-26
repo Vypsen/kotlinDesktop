@@ -44,7 +44,7 @@ object Kino {
     private val filmById = "/api/v2.1/films/search-by-keyword?keyword"
 
 
-    fun main(keyWord: String): InfoFilms {
+    fun main(keyWord: String): InfoFilms? {
 
 
         val paratmers = ArrayList<NameValuePair>()
@@ -55,10 +55,11 @@ object Kino {
 
         val result = makeAPICall("$baseURL$filmById=$keyWord", paratmers, headerParams)
 
-        val g = Gson()
-        var info = g.fromJson(result, InfoFilms::class.java)
 
-        return info
+        val g = Gson()
+        val infoFilms = g.fromJson(result, InfoFilms::class.java)
+
+        return infoFilms
     }
 
     fun makeAPICall(uri: String, parameters: List<NameValuePair>, headerParams: List<NameValuePair>): String {

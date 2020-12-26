@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Label?>
+<BorderPane fx:controller="searchResult" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <right>
+      <ScrollBar orientation="VERTICAL" BorderPane.alignment="CENTER" />
+   </right>
+   <center>
+      <VBox fx:id="list" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <opaqueInsets>
+            <Insets left="40.0" />
+         </opaqueInsets>
+         <children>
+            <HBox fx:id="Hbox1" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="image1"/>
+                  <VBox fx:id="Vbox1" prefHeight="200.0" prefWidth="100.0">
+                     <Label/>
+                     <Label/>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox2" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox2" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox3" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox3" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox4" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox4" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox5" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox5" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox6" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox6" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox7" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox7" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox8" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox8" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox9" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox9" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox10" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox10" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox11" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox11" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox12" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox12" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox13" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox13" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox14" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox14" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox15" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox15" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox16" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox16" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox17" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox17" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox18" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox18" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox19" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox19" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="Hbox20" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="Vbox20" prefHeight="200.0" prefWidth="100.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
