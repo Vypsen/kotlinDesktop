@@ -79,7 +79,8 @@ class Notify {
         private var comboBox = ComboBox(list)
 
         //элемент ввода
-        private var textField: TextField? = null
+        internal var textField: TextField? = null
+
 
         private var buttonOk = Button("Ok")
         private var buttonCancel = Button("Cancel")
@@ -226,6 +227,15 @@ class Notify {
 
             content.children.add(HboxButtons)
             sumHeight += 30
+        }
+
+        fun addOkButtonCallback(callback: Unit){
+            buttonOk.setOnAction { callback }
+        }
+
+        fun addCancelButtonCallback(callback: Unit){
+            buttonCancel.setOnAction { callback }
+            closeAnim()
         }
 
 
@@ -384,18 +394,18 @@ class Notify {
 
 
                 //эвенты на кнопки
-                buttonOk.addEventFilter(MouseEvent.MOUSE_PRESSED) {
-                    if (textField != null) {
-                        println(textField?.text)
-                    } else {
-                        println(comboBox.selectionModel.selectedItem)
-                    }
-                    closeAnim()
-                }
-
-                buttonCancel.setOnAction {
-                    closeAnim()
-                }
+//                buttonOk.addEventFilter(MouseEvent.MOUSE_PRESSED) {
+//                    if (textField != null) {
+//                        println(textField?.text)
+//                    } else {
+//                        println(comboBox.selectionModel.selectedItem)
+//                    }
+//                    closeAnim()
+//                }
+//
+//                buttonCancel.setOnAction {
+//                    closeAnim()
+//                }
 
 
                 content.padding = Insets(15.0)

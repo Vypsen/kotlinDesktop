@@ -25,7 +25,9 @@ class project: Application(){
         //apps.setComboBox()
 
         apps.addProgressBar()
-        //apps.addButtons()
+        apps.addButtons()
+        apps.addOkButtonCallback(print(apps.textField?.text))
+
         apps.SetPos(Notify.Position.RIGHT_TOP)
 
 
