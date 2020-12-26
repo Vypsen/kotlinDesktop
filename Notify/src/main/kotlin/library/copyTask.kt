@@ -13,9 +13,9 @@ class CopyTask : Task<List<File>>() {
 
 
 
-    var st = Stage()
-    val fileChooser = FileChooser()
-    var selectedFiles: MutableList<File> = fileChooser.showOpenMultipleDialog(st)
+    private var st = Stage()
+    private val fileChooser = FileChooser()
+    private var selectedFiles: MutableList<File> = fileChooser.showOpenMultipleDialog(st)
 
 
     override fun call(): List<File> {

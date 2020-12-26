@@ -8,12 +8,15 @@ import library.Notify
 
 
 class project: Application(){
+    var apps = Notify.builder()
+
+
 
     override fun start(primaryStage: Stage){
 
 
 
-        var apps = Notify.builder()
+
 
 
         //apps.setBorder(library.Notify.Border.SQUARE)
@@ -23,10 +26,14 @@ class project: Application(){
         //apps.setPressed(true)
         //apps.addTextField()
         //apps.setComboBox()
+        apps.SetWaitTime(100000)
 
         apps.addProgressBar()
-        apps.addButtons()
-        apps.addOkButtonCallback(print(apps.textField?.text))
+
+
+
+        //apps.addButtons()
+
 
         apps.SetPos(Notify.Position.RIGHT_TOP)
 

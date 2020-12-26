@@ -31,8 +31,12 @@ import javafx.util.Duration
 import java.io.File
 import javafx.scene.control.ProgressBar
 import javafx.concurrent.WorkerStateEvent
+import javafx.event.EventHandler
 import javafx.scene.layout.FlowPane
 import javafx.stage.FileChooser
+import project
+import kotlin.reflect.jvm.internal.impl.metadata.ProtoBuf
+import kotlin.Function as Function
 
 
 class Notify {
@@ -229,14 +233,7 @@ class Notify {
             sumHeight += 30
         }
 
-        fun addOkButtonCallback(callback: Unit){
-            buttonOk.setOnAction { callback }
-        }
 
-        fun addCancelButtonCallback(callback: Unit){
-            buttonCancel.setOnAction { callback }
-            closeAnim()
-        }
 
 
         //выпадающий список
@@ -298,6 +295,7 @@ class Notify {
 
 
         }
+
 
         fun addProgressBar() {
 
@@ -386,26 +384,28 @@ class Notify {
                     @Throws(InterruptedException::class)
                     override fun call(): Void? {
                         Thread.sleep(waitTime.toLong())
-                        //closeAnim()
+                        closeAnim()
                         return null
                     }
                 }
                 Thread(close).start()
 
 
+
+
                 //эвенты на кнопки
-//                buttonOk.addEventFilter(MouseEvent.MOUSE_PRESSED) {
-//                    if (textField != null) {
-//                        println(textField?.text)
-//                    } else {
-//                        println(comboBox.selectionModel.selectedItem)
-//                    }
-//                    closeAnim()
-//                }
-//
-//                buttonCancel.setOnAction {
-//                    closeAnim()
-//                }
+                buttonOk.addEventFilter(MouseEvent.MOUSE_PRESSED) {
+                    if (textField != null) {
+                        println(textField?.text)
+                    } else {
+                        println(comboBox.selectionModel.selectedItem)
+                    }
+                    closeAnim()
+                }
+
+                buttonCancel.setOnAction {
+                    closeAnim()
+                }
 
 
                 content.padding = Insets(15.0)
@@ -425,7 +425,7 @@ class Notify {
 
             }
 
-            private fun openAnim() {
+             private fun openAnim() {
 
 
                 mediaPlayer.play()
@@ -452,7 +452,7 @@ class Notify {
                 ft.play()
             }
 
-            private fun closeAnim() {
+            fun closeAnim() {
 
                 val ft = TranslateTransition(Duration.millis(100.0), content)
 
