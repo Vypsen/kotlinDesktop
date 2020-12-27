@@ -31,12 +31,9 @@ import javafx.util.Duration
 import java.io.File
 import javafx.scene.control.ProgressBar
 import javafx.concurrent.WorkerStateEvent
+import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.layout.FlowPane
-import javafx.stage.FileChooser
-import project
-import kotlin.reflect.jvm.internal.impl.metadata.ProtoBuf
-import kotlin.Function as Function
 
 
 class Notify {
@@ -57,7 +54,7 @@ class Notify {
 
 
 
-    class builder {
+     class builder {
 
 
 
@@ -98,9 +95,6 @@ class Notify {
         private val mediaPlayer = MediaPlayer(sound)
 
         private var HboxButtons = HBox()
-
-        private var fileChooser = FileChooser()
-        //private var selectedFiles: List<File>? = null
 
 
 
@@ -146,6 +140,7 @@ class Notify {
 
         //отступ
         fun SetShift(shift: Double) {
+
             this.shift = shift
         }
 
@@ -183,6 +178,7 @@ class Notify {
 
         //вставить сообщение
         fun addMessage(msg: String) {
+
             var message = Label(msg)
             message.font = Font(17.0)
             message.style = "-fx-text-fill:" + textColor
@@ -207,7 +203,9 @@ class Notify {
             sumHeight += 30
         }
 
-        //вставить кнопки
+
+
+         //вставить кнопки
         fun addButtons() {
 
             var colorButton = "#999999"
@@ -221,8 +219,7 @@ class Notify {
             buttonCancel.style = "-fx-background-color :" + colorButton
             buttonCancel.minHeight = 25.0
             buttonCancel.minWidth = 100.0
-
-            HboxButtons.children.addAll(buttonOk, buttonCancel)
+             HboxButtons.children.addAll(buttonOk, buttonCancel)
 
             HboxButtons.alignment = Pos.CENTER
             HboxButtons.spacing = 35.0
@@ -232,6 +229,21 @@ class Notify {
             content.children.add(HboxButtons)
             sumHeight += 30
         }
+
+
+         //действия на кнопки
+         fun clickOk(event: () -> Unit) {
+             buttonOk.setOnAction {
+                 event()
+             }
+         }
+
+         fun clickCancel(event: () -> Unit) {
+             buttonCancel.setOnAction {
+                 event()
+                 closeAnim()
+             }
+         }
 
 
 
@@ -393,19 +405,19 @@ class Notify {
 
 
 
-                //эвенты на кнопки
-                buttonOk.addEventFilter(MouseEvent.MOUSE_PRESSED) {
-                    if (textField != null) {
-                        println(textField?.text)
-                    } else {
-                        println(comboBox.selectionModel.selectedItem)
-                    }
-                    closeAnim()
-                }
-
-                buttonCancel.setOnAction {
-                    closeAnim()
-                }
+//                //эвенты на кнопки
+//                buttonOk.addEventFilter(MouseEvent.MOUSE_PRESSED) {
+//                    if (textField != null) {
+//                        println(textField?.text)
+//                    } else {
+//                        println(comboBox.selectionModel.selectedItem)
+//                    }
+//                    closeAnim()
+//                }
+//
+//                buttonCancel.setOnAction {
+//                    closeAnim()
+//                }
 
 
                 content.padding = Insets(15.0)
@@ -483,6 +495,8 @@ class Notify {
 
     }
 }
+
+
 
 
 
