@@ -13,17 +13,14 @@ import java.io.File
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.control.cell.PropertyValueFactory
-import javafx.scene.input.MouseEvent
 import javafx.util.Duration.seconds
-import kotlin.math.roundToInt
-import javax.sound.sampled.AudioFileFormat
 import kotlin.math.ceil
 import kotlin.math.floor
 
 
-class trackInfo(number: Int, name: String, time: String, uri: String) {
+class trackInfo(number: Int, name: String?, time: String, uri: String) {
     var number: Int = number
-    var name: String = name
+    var name: String? = name
     var time: String = time
     var uri: String = uri
 }
@@ -31,43 +28,51 @@ class trackInfo(number: Int, name: String, time: String, uri: String) {
 class MPlayer : Application() {
 
 
-
     @FXML
     lateinit var select: MenuItem
+
     @FXML
     lateinit var playButton: Button
+
     @FXML
     lateinit var pauseButton: Button
+
     @FXML
     lateinit var stopButton: Button
+
     @FXML
     lateinit var numberColumn: TableColumn<trackInfo, Int>
+
     @FXML
     lateinit var nameColumn: TableColumn<trackInfo, String>
+
     @FXML
     lateinit var durationColumn: TableColumn<trackInfo, String>
+
     @FXML
     lateinit var table: TableView<trackInfo>
+
     @FXML
     lateinit var sliderDuration: Slider
+
     @FXML
     lateinit var nextButton: Button
+
     @FXML
     lateinit var prevButton: Button
+
     @FXML
     lateinit var sliderVolume: Slider
 
 
+    private val data: ObservableList<trackInfo> = observableArrayList()
+    private val listMusic: ArrayList<String> = arrayListOf()
 
 
 
-
-    private var curFile: File? = null
-    private val data: ObservableList<trackInfo> = observableArrayList<trackInfo>()
     private var trackNumber = 1
-    private var nowPlaying: trackInfo? = null
+    private var nowPlaying: String? = null
     private var mplayer: MediaPlayer? = null
-
 
 
     @FXML
@@ -109,7 +114,8 @@ class MPlayer : Application() {
             row.setOnMouseClicked { e ->
                 if (e.clickCount == 2 && !row.isEmpty) {
                     mplayer?.stop()
-                    nowPlaying = row.item
+                    nowPlaying = row.item.uri
+                    mplayer = MediaPlayer(Media(nowPlaying))
                     playButton.text = "Play"
                     playClick()
                 }
@@ -117,101 +123,94 @@ class MPlayer : Application() {
             row
         }
 
-
     }
 
 
-
     private fun playClick() {
+
         if (playButton.text == "Play") {
-            mplayer = MediaPlayer(Media(nowPlaying!!.uri))
             playButton.text = "Pause"
             mplayer?.play()
-        }
-
-        else{
+        } else {
             mplayer?.pause()
             playButton.text = "Play"
         }
     }
 
-    private fun nextClick(){
+    private fun nextClick() {
         mplayer?.stop()
-        if(nowPlaying!!.number < trackNumber - 1 ) {
-            nowPlaying = data[nowPlaying!!.number]
-            mplayer = MediaPlayer(Media(nowPlaying!!.uri))
+        if (listMusic.indexOf(nowPlaying) < trackNumber - 2) {
+            nowPlaying = listMusic[listMusic.indexOf(nowPlaying) + 1]
+            mplayer = MediaPlayer(Media(nowPlaying))
             mplayer?.play()
-        }
-        else {
-            nowPlaying = data[0]
-            mplayer = MediaPlayer(Media(nowPlaying!!.uri))
+        } else {
+            nowPlaying = listMusic[0]
+            mplayer = MediaPlayer(Media(nowPlaying))
             mplayer?.play()
 
         }
     }
 
-    private fun  prevClick(){
+    private fun prevClick() {
         mplayer?.stop()
-        if(nowPlaying!!.number > 1) {
-            nowPlaying = data[nowPlaying!!.number - 2]
-            mplayer = MediaPlayer(Media(nowPlaying!!.uri))
+        if (listMusic.indexOf(nowPlaying) != 0) {
+            nowPlaying = listMusic[listMusic.indexOf(nowPlaying) - 1]
+            mplayer = MediaPlayer(Media(nowPlaying))
             mplayer?.play()
-        }
-        else {
-            nowPlaying = data[trackNumber - 2]
-            mplayer = MediaPlayer(Media(nowPlaying!!.uri))
+        } else {
+            nowPlaying = listMusic[trackNumber - 2]
+            mplayer = MediaPlayer(Media(nowPlaying))
             mplayer?.play()
         }
     }
 
-    private fun selectClick(){
+    private fun selectClick() {
         val fileChooser = FileChooser()
         fileChooser.title = "Open File"
         fileChooser.extensionFilters.addAll(
-                ExtensionFilter("Audio file", "*.mp3"))
+            ExtensionFilter("Audio file", "*.mp3"))
 
         var window = select.parentPopup.scene.window
 
         val selectedFiles: List<File> = fileChooser.showOpenMultipleDialog(window)
 
-        curFile = selectedFiles.first()
-        if (curFile != null) {
-            var media: Media?
-            var uri = curFile!!.toURI()
-            media = Media(uri.toString())
-            mplayer = MediaPlayer(media)
+        var media: Media?
+
+        sliders()
 
 
-            slid()
+        for (curFile in selectedFiles) {
 
+            if (!listMusic.contains(curFile.toURI().toString())) {
 
-            for (curFile in selectedFiles) {
-                var name = curFile.name
-
-                uri = curFile!!.toURI()
+                var uri = curFile.toURI()
                 media = Media(uri.toString())
-                mplayer = MediaPlayer(media)
+                var play = MediaPlayer(media)
 
-                var source = mplayer?.media?.source
-                source = source?.substring(0, source.length - ".mp3".length)
+                play.onReady = Runnable {
 
+                    val name = curFile.name.substringBefore('.')
+                    var time = play.totalDuration.toSeconds().toInt()
+                    var track = trackInfo(trackNumber, name, "$time seconds", curFile.toURI().toString())
+                    data.add(track)
+                    table.items = data
+                    trackNumber++
 
-
-
-                var track = trackInfo(trackNumber, name, "0", curFile!!.toURI().toString())
-                data.add(track)
-                table.items = data
-                trackNumber++
-
+                }
+                listMusic.add(curFile.toURI().toString())
             }
-
-
         }
-        nowPlaying =  data.first()
+
+
+        nowPlaying =  listMusic.first()
+        mplayer = MediaPlayer(Media(nowPlaying))
+
     }
 
 
-    private fun slid(){
+
+
+    private fun sliders(){
         Thread(Runnable {
 
             while (true) {
@@ -234,8 +233,8 @@ class MPlayer : Application() {
                     mplayer?.volume = sliderVolume.value / 100.0
 
                     if (sliderDuration.value >= sliderDuration.max){
-                        nowPlaying = data[nowPlaying!!.number]
-                        mplayer = MediaPlayer(Media(nowPlaying!!.uri))
+                        nowPlaying = listMusic[listMusic.indexOf(nowPlaying)+1]
+                        mplayer = MediaPlayer(Media(nowPlaying))
                         mplayer?.play()
                     }
 
@@ -256,7 +255,6 @@ class MPlayer : Application() {
 
 
 
-
     override fun start(primaryStage:Stage) {
 
         var root = FXMLLoader.load<Parent>(javaClass.getResource("main.fxml"))
@@ -274,6 +272,8 @@ class MPlayer : Application() {
         }
     }
 }
+
+
 
 
 
