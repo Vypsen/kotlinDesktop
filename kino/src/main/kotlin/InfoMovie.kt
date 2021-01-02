@@ -1,5 +1,4 @@
 import com.google.gson.Gson
-import javafx.stage.Stage
 import org.apache.http.NameValuePair
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.utils.URIBuilder
@@ -9,43 +8,16 @@ import org.apache.http.util.EntityUtils
 import java.util.ArrayList
 
 
-class InfoFilms{
-    var keyword = String()
-    var pagesCount = String()
-    var films: List<Films>? = null
-}
 
-class Films{
-    var filmId = String()
-    var nameRu = String()
-    var nameEn = String()
-    var type = String()
-    var year = String()
-    var description = String()
-    var countries: List<Countries>? = null
-    var genres: List<Genres>? = null
-    var rating = String()
-    var ratingVoteCount = String()
-    var posterUrl = String()
-    var posterUrlPreview = String()
-}
-
-class Countries{
-    var country = String()
-}
-
-class Genres{
-    var genre = String()
-}
 
 object Kino {
 
     private val baseURL = "https://kinopoiskapiunofficial.tech"
-    private val filmById = "/api/v2.1/films/search-by-keyword?keyword"
 
 
-    fun main(keyWord: String): InfoFilms? {
+    fun getSearch(keyWord: String = "str", page: Int): String {
 
+        val api = "/api/v2.1/films/search-by-keyword?keyword"
 
         val paratmers = ArrayList<NameValuePair>()
 
@@ -53,13 +25,39 @@ object Kino {
         headerParams.add(BasicNameValuePair("accept", "application/json"))
         headerParams.add(BasicNameValuePair("X-API-KEY", "f1d94351-2911-4485-b037-97817098724e"))
 
-        val result = makeAPICall("$baseURL$filmById=$keyWord", paratmers, headerParams)
 
+        val result = makeAPICall("$baseURL$api=$keyWord&page=$page", paratmers, headerParams)
+
+        println(result)
 
         val g = Gson()
         val infoFilms = g.fromJson(result, InfoFilms::class.java)
 
-        return infoFilms
+        return result
+    }
+
+
+    fun getObject(id: Int): String {
+
+        val api = "/api/v2.1/films/$id?append_to_response="
+
+        val paratmers = ArrayList<NameValuePair>()
+
+        val headerParams = ArrayList<NameValuePair>()
+        headerParams.add(BasicNameValuePair("accept", "application/json"))
+        headerParams.add(BasicNameValuePair("X-API-KEY", "f1d94351-2911-4485-b037-97817098724e"))
+
+
+        val result = makeAPICall("$baseURL$api", paratmers, headerParams)
+
+        println(11111111)
+        println(result)
+
+
+
+        return result
+
+
     }
 
     fun makeAPICall(uri: String, parameters: List<NameValuePair>, headerParams: List<NameValuePair>): String {
