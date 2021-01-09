@@ -49,28 +49,11 @@ class main: Application(){
 
         BorderPane.setAlignment(search, Pos.CENTER_RIGHT)
         BorderPane.setMargin(search, Insets(10.0, 20.0, 10.0, 0.0) )
+
+        scene.stylesheets.add(javaClass.getResource("qwerty.css").toExternalForm())
         primaryStage.scene = scene
+        window.style = ("-fx-background-image: url(" + "ki.jpg" +")")
         window.top = search
-
-
-        //window.padding = Insets(10.0, 0.0, 30.0, 0.0)
-
-//        val image = Image("kino.jpg")
-//
-//        val size = BackgroundSize(BackgroundSize.AUTO,
-//            BackgroundSize.AUTO,
-//            false,
-//            false,
-//            true,
-//            false)
-//
-//        val background = Background(BackgroundImage(image,
-//            BackgroundRepeat.NO_REPEAT,
-//            BackgroundRepeat.NO_REPEAT,
-//            BackgroundPosition.CENTER,
-//            size))
-//        window.background = background
-
 
 
         search.addEventHandler(KeyEvent.KEY_PRESSED) { ev ->
@@ -80,6 +63,7 @@ class main: Application(){
                 var scroll = searchResult().build(key)
                 //BorderPane.setAlignment(scroll, Pos.CENTER)
                 //BorderPane.setMargin(scroll, Insets(20.0, 0.0, 20.0, 100.0) )
+
                 window.center = scroll
                 primaryStage.scene = scene
             }

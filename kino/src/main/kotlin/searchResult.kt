@@ -1,40 +1,30 @@
 import com.google.gson.Gson
+import com.sun.javafx.scene.control.skin.Utils.getResource
 import javafx.event.EventHandler
 import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.scene.Cursor.CLOSED_HAND
 import javafx.scene.Cursor.HAND
 import javafx.scene.Node
 import javafx.scene.control.Label
+import javafx.scene.control.ScrollBar
 import javafx.scene.control.ScrollPane
 import javafx.scene.effect.DropShadow
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
-import javafx.scene.layout.HBox
-import javafx.scene.layout.VBox
+import javafx.scene.input.DataFormat.URL
+import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.stage.Screen
-import javafx.scene.layout.BackgroundPosition
 
-import javafx.scene.layout.BackgroundRepeat
-
-import javafx.scene.layout.BackgroundImage
-
-import javafx.scene.layout.Background
-
-import javafx.scene.layout.BackgroundSize
+import javafx.stage.StageStyle
 
 
-
-
-
-class InfoFilms {
-    var keyword = String()
-    var pagesCount = String()
-    var films: List<Films>? = null
-    var searchFilmsCountResult = 0
-}
+    class InfoFilms {
+        var keyword = String()
+        var pagesCount = String()
+        var films: List<Films>? = null
+    }
 
     class Films {
         var filmId = String()
@@ -53,13 +43,12 @@ class InfoFilms {
 
         var screen = Screen.getPrimary().bounds
 
-        var n = 0
-
         val shadow = DropShadow(10.0, Color.BLACK)
 
         var page = 1
 
         var count = 1
+
         var filmPage = 0
 
         val addList = Label("Добавить ещё фильмов")
@@ -89,7 +78,7 @@ class InfoFilms {
             }
 
             nameRu.onMouseClicked = EventHandler {
-                Film().takeJsom(film.filmId)
+                FormFilm(film.filmId).main()
             }
 
             val year = Label(film.year)
@@ -121,7 +110,6 @@ class InfoFilms {
             item.alignment = Pos.CENTER_LEFT
             item.padding = Insets(10.0)
 
-            n++
 
             item.style = "-fx-border-color: grey;" + "-fx-border-width: 0 0 1 0;" + "-fx-border-style: segments(3)"
 
@@ -142,7 +130,7 @@ class InfoFilms {
 
             var result = addPage(key, page)
 
-            for (i in 0..9) {
+            for (i in 0..4) {
                 if (page == result!!.pagesCount.toInt() && filmPage == result!!.films!!.size) {
 
                     addList.onMouseClicked = EventHandler {
@@ -169,7 +157,7 @@ class InfoFilms {
                     filmPage = 0
                     println(result!!.films!!.size)
                 }
-                for (i in 0..9) {
+                for (i in 0..4) {
                     if (page == result!!.pagesCount.toInt() && filmPage == result!!.films!!.size) {
 
                         addList.onMouseClicked = EventHandler {
@@ -209,21 +197,52 @@ class InfoFilms {
 
 
 
-            VBox.setMargin(list, Insets(20.0, 0.0, 0.0, screen.width/6))
-            VBox.setMargin(addList, Insets(10.0, 10.0, 50.0, screen.width*5/6))
-            search.children.addAll(list, addList)
+
 
             val scrollPane = ScrollPane(search)
-            list.prefWidth = screen.width*2/3
+
+
             list.padding = Insets(30.0)
-            //scrollPane.padding = Insets(0.0, 0.0, 0.0, 0.0)
-            //scrollPane.maxHeight = screen.height - 70
-            //scrollPane.style = "-fx-background-color: #EEEEEE"
+
+
+
+
+
+
+            val image = Image("ki.jpg")
+
+
+            scrollPane.minWidth = screen.width
+            search.minWidth = scrollPane.minWidth
+
+
+
+
+            search.alignment = Pos.CENTER
+
+
+            search.children.addAll(list, addList)
+
+
+            list.maxWidthProperty().bind(search.widthProperty().multiply(0.60))
+            VBox.setMargin(list, Insets(20.0, 0.0, 0.0, 0.0))
+            VBox.setMargin(addList, Insets(10.0, 0.0, 50.0, 0.0))
 
             list.style =  "-fx-background-color: white;" +
                     "-fx-effect: dropshadow(gaussian, black, 10 , 0, 0, 0);"
-            //list.style = "-fx-border-color: grey;" + "-fx-border-width: 1 1 1 1;"
+            println(search.minWidth)
 
+
+            var img = Image("ki.jpg")
+
+            ("-fx-background-color: transparent; ")
+
+            search.style =
+
+            //scrollPane. style =  "-fx-background-color: red;"
+           //scrollPane.style = ("-fx-background-image: url(" + "ki.jpg" +")")
+
+            //search.style = ("-fx-background-image: url(" + "ki.jpg" +")")
 
 
             return scrollPane

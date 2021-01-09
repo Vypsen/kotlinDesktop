@@ -12,10 +12,10 @@ import java.util.ArrayList
 
 object Kino {
 
-    private val baseURL = "https://kinopoiskapiunofficial.tech"
+        private val baseURL = "https://kinopoiskapiunofficial.tech"
 
 
-    fun getSearch(keyWord: String = "str", page: Int): String {
+    fun getSearch(keyWord: String, page: Int): String {
 
         val api = "/api/v2.1/films/search-by-keyword?keyword"
 
@@ -39,7 +39,53 @@ object Kino {
 
     fun getObject(id: Int): String {
 
-        val api = "/api/v2.1/films/$id?append_to_response="
+        val api = "/api/v2.1/films/$id"
+
+        val paratmers = ArrayList<NameValuePair>()
+
+        val headerParams = ArrayList<NameValuePair>()
+        headerParams.add(BasicNameValuePair("accept", "application/json"))
+        headerParams.add(BasicNameValuePair("X-API-KEY", "f1d94351-2911-4485-b037-97817098724e"))
+
+
+        val result = makeAPICall("$baseURL$api", paratmers, headerParams)
+
+
+
+
+        return result
+
+
+    }
+
+
+    fun getPeople(id: Int): String {
+
+        val api = "/api/v1/staff?filmId"
+
+        val paratmers = ArrayList<NameValuePair>()
+
+        val headerParams = ArrayList<NameValuePair>()
+        headerParams.add(BasicNameValuePair("accept", "application/json"))
+        headerParams.add(BasicNameValuePair("X-API-KEY", "f1d94351-2911-4485-b037-97817098724e"))
+
+
+        val result = makeAPICall("$baseURL$api=$id", paratmers, headerParams)
+
+        println(11111111)
+        println(result)
+
+
+
+        return result
+
+
+    }
+
+
+    fun getTrailer(id: Int): String {
+
+        val api = "/api/v2.1/films/$id/videos"
 
         val paratmers = ArrayList<NameValuePair>()
 
@@ -56,7 +102,6 @@ object Kino {
 
 
         return result
-
 
     }
 
