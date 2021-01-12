@@ -68,7 +68,7 @@ class MPlayer : Application() {
     private val data: ObservableList<trackInfo> = observableArrayList()
     private val listMusic: ArrayList<String> = arrayListOf()
 
-
+    private var nowTrack = 0
 
     private var trackNumber = 1
     private var nowPlaying: String? = null
@@ -77,6 +77,8 @@ class MPlayer : Application() {
 
     @FXML
     fun initialize() {
+
+
 
 
         select.setOnAction { selectClick() }
@@ -110,14 +112,17 @@ class MPlayer : Application() {
 
 
         table.setRowFactory {
-            var row: TableRow<trackInfo> = TableRow()
+            val row: TableRow<trackInfo> = TableRow()
             row.setOnMouseClicked { e ->
                 if (e.clickCount == 2 && !row.isEmpty) {
                     mplayer?.stop()
                     nowPlaying = row.item.uri
+                    nowTrack = listMusic.indexOf(nowPlaying)
+                    table.selectionModel.select(nowTrack)
                     mplayer = MediaPlayer(Media(nowPlaying))
                     playButton.text = "Play"
                     playClick()
+
                 }
             }
             row
@@ -131,10 +136,13 @@ class MPlayer : Application() {
         if (playButton.text == "Play") {
             playButton.text = "Pause"
             mplayer?.play()
+
+
         } else {
             mplayer?.pause()
             playButton.text = "Play"
         }
+        table.selectionModel.select(nowTrack)
     }
 
     private fun nextClick() {
@@ -142,13 +150,16 @@ class MPlayer : Application() {
         if (listMusic.indexOf(nowPlaying) < trackNumber - 2) {
             nowPlaying = listMusic[listMusic.indexOf(nowPlaying) + 1]
             mplayer = MediaPlayer(Media(nowPlaying))
+            nowTrack++
             mplayer?.play()
         } else {
             nowPlaying = listMusic[0]
             mplayer = MediaPlayer(Media(nowPlaying))
             mplayer?.play()
+            nowTrack = 0
 
         }
+        table.selectionModel.select(nowTrack)
     }
 
     private fun prevClick() {
@@ -156,12 +167,16 @@ class MPlayer : Application() {
         if (listMusic.indexOf(nowPlaying) != 0) {
             nowPlaying = listMusic[listMusic.indexOf(nowPlaying) - 1]
             mplayer = MediaPlayer(Media(nowPlaying))
+            nowTrack--
             mplayer?.play()
+
         } else {
             nowPlaying = listMusic[trackNumber - 2]
             mplayer = MediaPlayer(Media(nowPlaying))
             mplayer?.play()
+            nowTrack = listMusic.size - 1
         }
+        table.selectionModel.select(nowTrack)
     }
 
     private fun selectClick() {
@@ -186,6 +201,7 @@ class MPlayer : Application() {
                 var uri = curFile.toURI()
                 media = Media(uri.toString())
                 var play = MediaPlayer(media)
+
 
                 play.onReady = Runnable {
 
