@@ -78,7 +78,7 @@ import javafx.stage.StageStyle
             }
 
             nameRu.onMouseClicked = EventHandler {
-                FormFilm(film.filmId).main()
+                filmController().main(film.filmId)
             }
 
             val year = Label(film.year)
@@ -118,7 +118,7 @@ import javafx.stage.StageStyle
         }
 
         fun addPage(key: String, page: Int): InfoFilms? {
-            val result = Kino.getSearch(key, page)
+            val result = Kino.getJsonListSearch(key, page)
             val g = Gson()
             return g.fromJson(result, InfoFilms::class.java)
         }

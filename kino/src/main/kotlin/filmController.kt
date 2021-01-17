@@ -1,8 +1,9 @@
-import javafx.css.Style
+import com.google.gson.Gson
 import javafx.event.EventHandler
 import javafx.fxml.FXML
+import javafx.fxml.FXMLLoader
 import javafx.scene.Cursor
-import javafx.scene.control.Hyperlink
+import javafx.scene.Parent
 import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
@@ -76,14 +77,53 @@ class filmController {
     @FXML
     lateinit var country: HBox
 
+    var film = DataFilms()
+    var trailers = Trailers()
+    var listPeople = ListPeople()
+
+    var linkTrailer = String()
+
+    var countDir = 0
+    var countProd = 0
+    var countWrit = 0
+    var countDis = 0
+    var countAct = 0
+
+    var uri = String()
 
 
+    private fun takeJsonFilm(id:String): DataFilms {
+        uri = "/api/v2.1/films/$id"
+        val result = Kino.getJson(uri)
+        println(result)
+        val g = Gson()
 
+        return g.fromJson(result, DataFilms::class.java)
+    }
+
+    private fun takeJsonPeople(id: String): ListPeople {
+        uri = "/api/v1/staff?filmId=$id"
+        val g = Gson()
+        var result = Kino.getJson(uri)
+        result = "{ people: $result }"
+        return (g.fromJson(result, ListPeople::class.java))
+    }
+
+    private fun takeJsonTrailers(id: String): Trailers {
+        uri = "/api/v2.1/films/$id/videos"
+        val g = Gson()
+        var result = Kino.getJson(uri)
+        return (g.fromJson(result, Trailers::class.java))
+    }
 
     @FXML
     fun initialize(){
 
+
+
         nameRu.text = film.data.nameRu
+        println(nameRu.text)
+        println(11)
         nameEn.text = film.data.nameEn
         year.text = film.data.year
         slogan.text = film.data.slogan
@@ -97,20 +137,16 @@ class filmController {
 
         poster.image = Image(film.data.posterUrl, 300.0, 480.0, false, true)
 
-        val link = trailers.trailers!![0].url
+        linkTrailer = trailers.trailers!![0].url
 
-        trailer.engine.load(link)
+        trailer.engine.load(linkTrailer)
         trailer.setPrefSize(300.0, 150.0)
 
 
 
-        var countDir = 0
-        var countProd = 0
-        var countWrit = 0
-        var countDis = 0
-        var countAct = 0
 
-        for(i in persons.people!!){
+
+        for(i in listPeople.people!!){
             val label = Label(i.nameRu)
             label.font = Font(14.0)
             label.style = "-fx-text-fill: white;" + "-fx-font-style: Italic;" + "-fx-underline: true;"
@@ -166,15 +202,25 @@ class filmController {
             country.children.add(label)
         }
 
-        for (i in film.data.genres!!){
+        for (i in film.data.genres!!) {
             val label = Label(i.genre)
             label.font = Font(14.0)
             label.style = "-fx-text-fill: white;"
             genre.children.add(label)
         }
+    }
 
+    fun main(filmId: String) {
 
+        film = takeJsonFilm(filmId)
+        trailers = takeJsonTrailers(filmId)
+        listPeople = takeJsonPeople(filmId)
 
+        val root = FXMLLoader.load<Parent>(javaClass.getResource("fForm.fxml"))
+        println(root)
+
+        window.style = "-fx-background-color: black"
+        window.center = root
 
 
     }
