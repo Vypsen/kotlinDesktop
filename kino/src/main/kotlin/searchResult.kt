@@ -138,8 +138,8 @@ import javafx.stage.StageStyle
                     }
                     break
                 }
-                val film = result!!.films!![filmPage]
-                if (filmPage != result!!.films!!.size) {
+                val film = result.films!![filmPage]
+                if (filmPage != result.films!!.size) {
                     list.children.add(addFilm(film))
                     count++
                     filmPage++
@@ -209,8 +209,6 @@ import javafx.stage.StageStyle
 
 
 
-            val image = Image("ki.jpg")
-
 
             scrollPane.minWidth = screen.width
             search.minWidth = scrollPane.minWidth
@@ -233,17 +231,10 @@ import javafx.stage.StageStyle
             println(search.minWidth)
 
 
-            var img = Image("ki.jpg")
-
-            ("-fx-background-color: transparent; ")
-
-            search.style =
-
-            //scrollPane. style =  "-fx-background-color: red;"
-           //scrollPane.style = ("-fx-background-image: url(" + "ki.jpg" +")")
-
-            //search.style = ("-fx-background-image: url(" + "ki.jpg" +")")
-
+//            if(stackPane.children.size != 0){
+//                stackPane.children.removeAt(1)
+//            }
+            stack.add(scrollPane)
 
             return scrollPane
 

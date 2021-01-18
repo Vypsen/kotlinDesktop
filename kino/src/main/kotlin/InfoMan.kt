@@ -5,9 +5,11 @@ class InfoMan {
     var posterUrl = String()
     var growth = String()
     var birthday = String()
-    var death = String()
+    var death = "death"
     var age = String()
     var birthplace = String()
     var deathplace = String()
     var profession = String()
+    var films: List<Films>? = null
+    var facts: List<String>? = null
 }

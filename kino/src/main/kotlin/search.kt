@@ -1,5 +1,6 @@
 import javafx.geometry.Pos
 import javafx.scene.control.TextField
+import javafx.scene.layout.AnchorPane
 import javafx.scene.text.Font
 
 class Search{
@@ -11,6 +12,11 @@ class Search{
         search.maxWidth = 180.0
         search.font = Font(17.0)
         search.alignment = Pos.CENTER
+
+        AnchorPane.setTopAnchor(search, 10.0)
+        AnchorPane.setRightAnchor(search, 10.0)
+        AnchorPane.setBottomAnchor(search, 10.0)
+
 
         return search
     }

@@ -8,21 +8,24 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="768.0" prefWidth="1366.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+<ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="manController">
    <content>
-      <VBox prefHeight="768.0" prefWidth="1366.0">
+      <VBox fx:id="content" prefHeight="768.0" prefWidth="1366.0" spacing="30.0" style="-fx-background-color: transparent;">
          <children>
-            <HBox prefHeight="592.0" prefWidth="1166.0" spacing="70.0">
+            <HBox fx:id="contentInfo" prefHeight="570.0" prefWidth="1192.0" spacing="70.0">
                <children>
-                  <ImageView fx:id="imgMan" fitHeight="500.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
-                  <VBox prefHeight="848.0" prefWidth="500.0">
+                  <ImageView fx:id="imgMan" fitHeight="500.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets top="30.0" />
+                     </HBox.margin></ImageView>
+                  <VBox fx:id="info" prefHeight="592.0" prefWidth="608.0" style="-fx-background-color: #282727; -fx-effect: dropshadow(gaussian, black, 10 , 0, 0, 0);">
                      <children>
-                        <Label fx:id="nameRu" prefHeight="24.0" prefWidth="305.0" text="nameRu">
+                        <Label fx:id="nameRu" prefHeight="58.0" prefWidth="393.0" text="nameRu" textFill="WHITE">
                            <font>
-                              <Font name="System Bold" size="40.0" />
+                              <Font name="System Bold" size="34.0" />
                            </font>
                         </Label>
-                        <Label fx:id="nameEn" text="nameEn">
+                        <Label fx:id="nameEn" text="nameEn" textFill="GREY">
                            <font>
                               <Font size="26.0" />
                            </font>
@@ -37,66 +40,112 @@
                         </Label>
                         <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0">
                            <children>
-                              <HBox prefHeight="7.0" prefWidth="305.0" spacing="30.0">
+                              <HBox prefHeight="7.0" prefWidth="305.0" spacing="30.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: #353535;">
+                                 <children>
+                                    <Label prefHeight="20.0" prefWidth="135.0" text="Пол" textFill="GREY">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="sex" prefHeight="20.0" prefWidth="252.0" text="Label" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="7.0" prefWidth="305.0" spacing="30.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: #353535;">
                                  <children>
                                     <Label prefHeight="20.0" prefWidth="135.0" text="Рост" textFill="GREY">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="growth" prefHeight="17.0" prefWidth="203.0" text="Label">
+                                    <Label fx:id="growth" prefHeight="20.0" prefWidth="240.0" text="Label" textFill="WHITE">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox prefHeight="7.0" prefWidth="305.0" spacing="30.0">
+                              <HBox prefHeight="7.0" prefWidth="305.0" spacing="30.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: #353535;">
                                  <children>
                                     <Label prefHeight="20.0" prefWidth="135.0" text="Карьера" textFill="GREY">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <HBox fx:id="profession" prefHeight="100.0" prefWidth="200.0" spacing="5.0" />
+                                    <Label fx:id="profession" prefHeight="20.0" prefWidth="239.0" text="Label" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                               </HBox>
-                              <HBox prefHeight="7.0" prefWidth="305.0" spacing="30.0">
+                              <HBox prefHeight="7.0" prefWidth="305.0" spacing="30.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: #353535;">
                                  <children>
                                     <Label prefHeight="20.0" prefWidth="135.0" text="Дата рождения" textFill="GREY">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="birthday" prefHeight="17.0" prefWidth="203.0" text="Label">
+                                    <Label fx:id="birthday" prefHeight="20.0" prefWidth="247.0" text="Label" textFill="WHITE">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox prefHeight="7.0" prefWidth="305.0" spacing="30.0">
+                              <HBox prefHeight="7.0" prefWidth="305.0" spacing="30.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: #353535;">
                                  <children>
                                     <Label prefHeight="20.0" prefWidth="135.0" text="Место рождения" textFill="GREY">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="birthplace" prefHeight="17.0" prefWidth="203.0" text="Label">
+                                    <Label fx:id="birthplace" prefHeight="20.0" prefWidth="243.0" text="Label" textFill="WHITE">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox prefHeight="7.0" prefWidth="305.0" spacing="30.0">
+                              <HBox prefHeight="7.0" prefWidth="305.0" spacing="30.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: #353535;">
                                  <children>
                                     <Label prefHeight="20.0" prefWidth="135.0" text="Всего фильмов" textFill="GREY">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="countFilms" prefHeight="17.0" prefWidth="203.0" text="Label">
+                                    <Label fx:id="countFilms" prefHeight="20.0" prefWidth="247.0" text="Label" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox fx:id="hboxDeathplace" prefHeight="7.0" prefWidth="305.0" spacing="30.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: #353535;">
+                                 <children>
+                                    <Label prefHeight="20.0" prefWidth="135.0" text="Место смерти" textFill="GREY">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="deathplace" prefHeight="20.0" prefWidth="203.0" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox fx:id="hboxDeath" prefHeight="7.0" prefWidth="305.0" spacing="30.0">
+                                 <children>
+                                    <Label prefHeight="20.0" prefWidth="135.0" text="Дата сметри" textFill="GREY">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="death" prefHeight="20.0" prefWidth="203.0" textFill="WHITE">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
@@ -113,21 +162,49 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </padding>
                   </VBox>
-                  <VBox prefHeight="492.0" prefWidth="418.0">
+                  <VBox fx:id="filmsList" prefHeight="492.0" prefWidth="418.0" style="-fx-background-color: #282727; -fx-effect: dropshadow(gaussian, black, 10 , 0, 0, 0);">
                      <children>
-                        <Label text="Фильмы:">
+                        <Label prefHeight="34.0" prefWidth="200.0" text="Фильмы:" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="23.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
                         </Label>
-                        <VBox fx:id="films" prefHeight="495.0" prefWidth="229.0" spacing="10.0" />
+                        <VBox fx:id="films" prefHeight="495.0" prefWidth="229.0" spacing="10.0">
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin></VBox>
                      </children>
                      <HBox.margin>
-                        <Insets top="100.0" />
+                        <Insets top="30.0" />
                      </HBox.margin>
                   </VBox>
                </children>
             </HBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: gray; -fx-effect: dropshadow(gaussian, black, 10 , 0, 0, 0);">
+               <children>
+                  <Label prefHeight="107.0" prefWidth="740.0" text="Знаете ли вы, что…" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="40.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <VBox fx:id="facts" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                     <VBox.margin>
+                        <Insets left="30.0" />
+                     </VBox.margin>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="40.0" />
+               </padding></VBox>
          </children>
          <padding>
             <Insets left="100.0" right="100.0" top="20.0" />

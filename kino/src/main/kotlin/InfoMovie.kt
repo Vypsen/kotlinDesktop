@@ -28,10 +28,7 @@ object Kino {
 
         val result = makeAPICall("$baseURL$api=$keyWord&page=$page", paratmers, headerParams)
 
-        println(result)
 
-        val g = Gson()
-        val infoFilms = g.fromJson(result, InfoFilms::class.java)
 
         return result
     }
