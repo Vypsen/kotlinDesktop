@@ -156,18 +156,44 @@ class filmController {
 
 
         if (trailers.trailers!!.isNotEmpty()) {
-            linkTrailer = trailers.trailers!![0].url
             val trailer = WebView()
+            val img = StackPane()
+            val close = Button("Close")
+            val stage = Stage()
+            val sceneTrailer = Scene(img, 700.0, 500.0)
+
+
+
+            linkTrailer = trailers.trailers!![0].url
 
             trailer.engine.load(linkTrailer)
 
-            val sceneTrailer = Scene(trailer, 700.0, 500.0)
 
-            val stage = Stage()
+            close.prefWidth = 50.0
+            close.prefHeight = 30.0
+            StackPane.setAlignment(close, Pos.TOP_RIGHT)
+
+            img.children.addAll(trailer, close)
+
+            stage.initStyle(StageStyle.TRANSPARENT)
+
             stage.scene = sceneTrailer
             stage.show()
+            close.setOnAction {
+                stage.close()
+                trailer.engine.load(null)
+            }
+
 
         }
+
+
+
+
+
+
+
+
     }
 
 
