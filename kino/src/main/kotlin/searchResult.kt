@@ -130,6 +130,7 @@ import javafx.stage.StageStyle
 
             var result = addPage(key, page)
 
+
             for (i in 0..4) {
                 if (page == result!!.pagesCount.toInt() && filmPage == result!!.films!!.size) {
 
@@ -231,9 +232,10 @@ import javafx.stage.StageStyle
             println(search.minWidth)
 
 
-//            if(stackPane.children.size != 0){
-//                stackPane.children.removeAt(1)
-//            }
+            println(stackPane.children[0])
+            if(stackPane.children.size != 1){
+                stackPane.children.removeAt(1)
+            }
             stack.add(scrollPane)
 
             return scrollPane

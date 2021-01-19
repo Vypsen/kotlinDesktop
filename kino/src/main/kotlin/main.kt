@@ -16,6 +16,14 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.*
 import javafx.scene.layout.StackPane.setAlignment
 import javafx.scene.shape.Rectangle
+import java.io.BufferedReader
+import java.net.URLEncoder
+
+
+
+
+
+
 
 
 var stack: ArrayList<ScrollPane> = arrayListOf()
@@ -63,9 +71,17 @@ class main: Application(){
         window.top = menuTop
         search.addEventHandler(KeyEvent.KEY_PRESSED) { ev ->
             if (ev.code === KeyCode.ENTER) {
+
                 key = search.text
 
-                stackPane.children.add(searchResult().build(key))
+                val charset = Charsets.UTF_8
+
+
+                val url =  URLEncoder.encode(key, "UTF-8")
+
+                println(url)
+
+                stackPane.children.add(searchResult().build(url))
                 primaryStage.scene = scene
             }
         }
