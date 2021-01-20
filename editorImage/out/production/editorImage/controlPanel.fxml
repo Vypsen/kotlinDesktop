@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane prefHeight="200.0" prefWidth="884.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControlPanel">
+   <top>
+      <HBox prefHeight="41.0" prefWidth="845.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#addImage" text="Добавить пикчу" />
+            <Button mnemonicParsing="false" onAction="#blackWhiteFilter" text="Чёрно-белое" />
+            <Button mnemonicParsing="false" onAction="#negativeFilter" text="Негатив" />
+            <Button mnemonicParsing="false" onAction="#histogram" text="Выравнивание гистограммы" />
+            <Button mnemonicParsing="false" onAction="#brightnessSaturationFilter" text="Яркость и насыщенность" />
+            <Button mnemonicParsing="false" onAction="#save" text="Сохранить" />
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <AnchorPane fx:id="control" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
