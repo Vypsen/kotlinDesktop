@@ -1,113 +1,71 @@
-import javafx.beans.binding.Bindings
-import javafx.beans.binding.When
-import javafx.beans.property.SimpleDoubleProperty
 import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.geometry.Point2D
 import javafx.scene.control.Label
+import javafx.scene.control.TextField
 import javafx.scene.input.*
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.TilePane
-import javafx.scene.shape.CubicCurve
 import javafx.stage.FileChooser
-import java.io.File
-import java.io.IOException
+import javafx.stage.Window
 import java.util.*
 
+import org.opencv.core.*
+import org.opencv.imgproc.Imgproc
+
+import org.opencv.imgproc.CLAHE
+
+import org.opencv.core.Mat
+import org.opencv.core.CvType
+
+import org.opencv.core.Core
+
+import org.opencv.core.MatOfFloat
+
+import org.opencv.core.MatOfInt
+import org.opencv.imgcodecs.Imgcodecs
+import org.opencv.imgproc.Imgproc.line
+
+import java.util.ArrayList
 
 
-class NodeLink : AnchorPane() {
 
-    @FXML
-    var node_link: CubicCurve? = null
 
-    val offsetX = SimpleDoubleProperty()
-    val offsetY = SimpleDoubleProperty()
-    val offsetDirX1 = SimpleDoubleProperty()
-    val offsetDirX2 = SimpleDoubleProperty()
-    val offsetDirY1 = SimpleDoubleProperty()
-    val offsetDirY2 = SimpleDoubleProperty()
 
-    @FXML
-    private fun initialize() {
-        offsetX.set(100.0)
-        offsetY.set(50.0)
 
-        offsetDirX1.bind(
-            When(node_link!!.startXProperty().greaterThan(node_link!!.endXProperty())).then(-1.0).otherwise(1.0))
 
-        offsetDirX2.bind(
-            When(node_link!!.startXProperty().greaterThan(node_link!!.endXProperty())).then(1.0).otherwise(-1.0))
 
-        node_link!!.controlX1Property().bind(Bindings.add(node_link!!.startXProperty(), offsetX.multiply(offsetDirX1)))
-        node_link!!.controlX2Property().bind(Bindings.add(node_link!!.endXProperty(), offsetX.multiply(offsetDirX2)))
-        node_link!!.controlY1Property().bind(Bindings.add(node_link!!.startYProperty(), offsetY.multiply(offsetDirY1)))
-        node_link!!.controlY2Property().bind(Bindings.add(node_link!!.endYProperty(), offsetY.multiply(offsetDirY2)))
-    }
 
-    fun setStart(point: Point2D) {
-        println(node_link!!.startX)
-        println(point.x)
-
-        node_link!!.startX = point.x
-        node_link!!.startY = point.y
-    }
-
-    fun setEnd(point: Point2D) {
-        node_link!!.endX = point.x
-        node_link!!.endY = point.y
-    }
-
-    fun bindStartEnd(source1: DraggableNode, source2: DraggableNode) {
-        node_link!!.startXProperty().bind(Bindings.add(source1.layoutXProperty(), source1.width/2.0))
-        node_link!!.startYProperty().bind(Bindings.add(source1.layoutYProperty(), source1.height/2.0))
-        node_link!!.endXProperty().bind(Bindings.add(source2.layoutXProperty(), source2.width/2.0))
-        node_link!!.endYProperty().bind(Bindings.add(source2.layoutYProperty(), source2.height/2.0))
-    }
-
-    init {
-        val fxmlLoader = FXMLLoader(
-            javaClass.getResource("link.fxml")
-        )
-        fxmlLoader.setRoot(this)
-        fxmlLoader.setController(this)
-        try {
-            fxmlLoader.load<Any>()
-        } catch (exception: IOException) {
-            throw RuntimeException(exception)
-        }
-        id = UUID.randomUUID().toString()
-    }
+enum class Filters{
+    addImage,
+    blackWhite,
+    negative,
+    blur,
+    saturation,
+    mirror
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 var stateAddNode = DataFormat("nodeAdd")
 var stateAddLink = DataFormat("linkAdd")
-class DraggableNode(link: String) : HBox() {
 
+class DraggableNode(link: String, filter: Filters) :HBox(){
 
+    var thisFilters: Filters? = null
     var offset = Point2D(0.0, 0.0)
 
+    @FXML
+    var brightness: TextField? = null
 
+    @FXML
+    var saturation : TextField? = null
+
+    @FXML
+    var widthBlur: TextField? = null
+
+    @FXML
+    var heightBlur : TextField? = null
 
 
     @FXML
@@ -116,10 +74,8 @@ class DraggableNode(link: String) : HBox() {
     var link = NodeLink()
 
 
-
     @FXML
     lateinit var rightLink: TilePane
-
     @FXML
     var leftLink: TilePane? = null
 
@@ -133,9 +89,65 @@ class DraggableNode(link: String) : HBox() {
     lateinit var contextLinkDragOver: EventHandler<DragEvent>
     lateinit var contextLinkDagDropped: EventHandler<DragEvent>
 
-    var nextActionNode: DraggableNode? = null
-    var prevActionNode: DraggableNode? = null
+    var nextNode: DraggableNode? = null
+    var prevNode: DraggableNode? = null
 
+
+    fun takeFilter(){
+
+        when (thisFilters){
+
+            Filters.addImage-> {
+                ControlPanel.SetImage(Node.currentImagePath)
+            }
+            Filters.saturation -> {
+                val brightness = if(brightness!!.text.isEmpty() || brightness!!.text.toDouble() < 1){
+                    0.0
+                }
+                else{
+                    brightness!!.text.toDouble()
+                }
+                val saturation = if(saturation!!.text.isEmpty() || saturation!!.text.toDouble() < 1){
+                    0.0
+                }
+                else{
+                    saturation!!.text.toDouble()
+                }
+
+                ControlPanel.setSaturation(brightness, saturation)
+            }
+
+            Filters.negative -> {
+                ControlPanel.setNegative()
+            }
+
+            Filters.blackWhite -> {
+                ControlPanel.setBlackWhite()
+            }
+
+            Filters.blur -> {
+
+                val blurW = if(widthBlur!!.text.isEmpty() || widthBlur!!.text.toDouble() < 1){
+                    1.0
+                }
+                else{
+                    widthBlur!!.text.toDouble()
+                }
+                val blurH = if(heightBlur!!.text.isEmpty() || heightBlur!!.text.toDouble() < 1){
+                    1.0
+                }
+                else{
+                    heightBlur!!.text.toDouble()
+                }
+
+                ControlPanel.setBlur(blurW, blurH)
+            }
+
+            Filters.mirror -> {
+                ControlPanel.setMirror()
+            }
+        }
+    }
 
     @FXML
     private fun initialize() {
@@ -148,9 +160,51 @@ class DraggableNode(link: String) : HBox() {
 
         parentProperty().addListener{ o, old, new -> superParent = parent as AnchorPane?}
 
+        brightness?.textProperty()?.addListener { o, old, new ->
+            try {
+                brightness?.text = new.toString()
+                if(brightness?.text?.toDouble()!! > 255.0)
+                    brightness?.text = 255.0.toString()
+            }
+            catch (e: NumberFormatException){
+                brightness?.text = 0.0.toString()
+            }
+            ControlPanel.RefreshFilters()
+        }
 
+        saturation ?.textProperty()?.addListener { o, old, new ->
+            try {
+                saturation?.text = new.toString()
+                if(saturation?.text?.toDouble()!! > 255.0)
+                    saturation?.text = 255.0.toString()
+            }
+            catch (e: NumberFormatException){
+                saturation?.text = 0.0.toString()
+            }
+            ControlPanel.RefreshFilters()
+        }
+
+
+        widthBlur?.textProperty()?.addListener { o, old, new ->
+            try {
+                widthBlur?.text = new.toString()
+            }
+            catch (e: NumberFormatException){
+
+            }
+            ControlPanel.RefreshFilters()
+        }
+
+        heightBlur?.textProperty()?.addListener { o, old, new ->
+            try {
+                heightBlur?.text = new.toString()
+            }
+            catch (e: NumberFormatException){
+
+            }
+            ControlPanel.RefreshFilters()
+        }
     }
-
 
     init{
 
@@ -160,7 +214,10 @@ class DraggableNode(link: String) : HBox() {
         fxmlLoader.setController(this)
         fxmlLoader.load<Any>()
 
+        thisFilters = filter
 
+        id = Node.nodeId.toString()
+        Node.nodeId++
 
     }
 
@@ -168,34 +225,33 @@ class DraggableNode(link: String) : HBox() {
     @FXML
     fun addImage(){
 
-        println(1)
         val fileChooser = FileChooser()
-        var imagePath = String()
+
         fileChooser.extensionFilters.addAll(
             FileChooser.ExtensionFilter("Image", "*.png", "*.jpg")
         )
-        val selectedFile: File = fileChooser.showOpenDialog(null)
-        imagePath = selectedFile.toURI().toString().drop(6)
-        Node.currentImagePath = imagePath
-//        ImageEdit.RefreshImage()
+        val imagePath = fileChooser.showOpenDialog(null).toURI().toString().drop(6)
 
+
+        Node.currentImagePath = imagePath
+        val imgToAdd: Mat = Imgcodecs.imread(imagePath)
+        Node.image = imgToAdd
+        ControlPanel.RefreshFilters()
     }
+
 
     @FXML
     fun delete(){
-        println(11)
-        val prevTemplate = prevActionNode
-        prevTemplate?.nextActionNode = null
+        val nextNode = nextNode
+        val prevNode = prevNode
 
-        val nextTemplate = nextActionNode
-        nextTemplate?.prevActionNode = null
+        prevNode?.nextNode = null
+        nextNode?.prevNode = null
 
-        this.nextActionNode = null
-        this.prevActionNode = null
+        this.nextNode = null
+        this.prevNode = null
 
         refreshCurves()
-
-
 
         this.isVisible = false
         var counter: Int = 1
@@ -210,7 +266,7 @@ class DraggableNode(link: String) : HBox() {
         }
 
 
-        //  ImageEdit.RefreshImage()
+        ControlPanel.RefreshFilters()
     }
 
 
@@ -236,8 +292,6 @@ class DraggableNode(link: String) : HBox() {
             event.consume()
         }
 
-
-
         title!!.onDragDetected = EventHandler { event->
             parent.onDragOver = contextDragOver
             parent.onDragDropped = contextDragDropped
@@ -254,10 +308,8 @@ class DraggableNode(link: String) : HBox() {
     }
 
 
-
     fun linkHandlers() {
 
-        //добавление новой линии
         linkDragDetected = EventHandler { event ->
             parent.onDragOver = null
             parent.onDragDropped = null
@@ -265,21 +317,18 @@ class DraggableNode(link: String) : HBox() {
             Node.nodeDragged = this
 
             println(Node.nodeDragged)
-            if(this.nextActionNode != null){
+            if(this.nextNode != null){
 
-                this.nextActionNode?.prevActionNode = null
-                this.nextActionNode = null
-//                ImageEdit.RefreshImage()
+                this.nextNode?.prevNode = null
+                this.nextNode = null
+                ControlPanel.RefreshFilters()
                 refreshCurves()
 
-                //добавление новой
                 parent.onDragOver = contextLinkDragOver
                 parent.onDragDropped = contextLinkDagDropped
 
                 superParent!!.children.add(0, link)
-                link.isVisible = true
 
-                //позиция начала кривой во время перетаскивания
                 val p = Point2D(this.layoutX + width/2, this.layoutY + height/4)
                 link.setStart(p)
 
@@ -292,9 +341,13 @@ class DraggableNode(link: String) : HBox() {
                 parent.onDragOver = contextLinkDragOver
                 parent.onDragDropped = contextLinkDagDropped
 
-                superParent!!.children.add(0, link)
+                try{
+                    superParent!!.children.add(0, link)
+                }
+                catch(e: Exception){
 
-                //позиция начала кривой во время перетаскивания
+                }
+
                 val p = Point2D(layoutX + width / 2, layoutY + height / 2)
                 link.setStart(p)
                 println(p.x)
@@ -308,30 +361,26 @@ class DraggableNode(link: String) : HBox() {
             event.consume()
         }
 
-        //драг для удаления уже присоединенной линии
         linkDeleteDragDetected = EventHandler { event ->
-            if(this.prevActionNode == null)
+            if(this.prevNode == null)
                 return@EventHandler
 
             parent.onDragOver = null
             parent.onDragDropped = null
 
-            //удаление и пересчет линий
-            Node.nodeDragged = this.prevActionNode
-            this.prevActionNode?.nextActionNode = null
-            this.prevActionNode = null
+            Node.nodeDragged = this.prevNode
+            this.prevNode?.nextNode = null
+            this.prevNode = null
             println(Node.nodeDragged)
-//            ImageEdit.RefreshImage()
+            ControlPanel.RefreshFilters()
             refreshCurves()
 
-            //добавление новой
             parent.onDragOver = contextLinkDragOver
             parent.onDragDropped = contextLinkDagDropped
 
             superParent!!.children.add(0, link)
             link.isVisible = true
 
-            //позиция начала кривой во время перетаскивания
             val p = Point2D(Node.nodeDragged!!.layoutX + width/2, Node.nodeDragged!!.layoutY + height/4)
 
             link.setStart(p)
@@ -341,10 +390,9 @@ class DraggableNode(link: String) : HBox() {
             startDragAndDrop(*TransferMode.ANY).setContent(content)
             event.consume()
 
-//            ImageEdit.RefreshImage()
+            ControlPanel.RefreshFilters()
         }
 
-        //конец кривой лежит на другом ноде
         linkDragDropped = EventHandler { event ->
 
             parent.onDragOver = null
@@ -352,8 +400,7 @@ class DraggableNode(link: String) : HBox() {
 
             superParent!!.children.removeAt(0)
 
-            if(this.prevActionNode != null){
-                println("Уже соединен")
+            if(this.prevNode != null){
                 return@EventHandler
             }
             else {
@@ -363,9 +410,9 @@ class DraggableNode(link: String) : HBox() {
                 Node.curvesNum++
                 superParent!!.children.add(0, link)
 
-                Node.nodeDragged!!.nextActionNode = this
-                this.prevActionNode = Node.nodeDragged
-//                ImageEdit.RefreshImage()
+                Node.nodeDragged!!.nextNode = this
+                this.prevNode = Node.nodeDragged
+                ControlPanel.RefreshFilters()
                 Node.nodeDragged = null
             }
 
@@ -373,21 +420,17 @@ class DraggableNode(link: String) : HBox() {
             event.consume()
         }
 
-        //позиция конца прямой во время перетаскивания
         contextLinkDragOver = EventHandler { event ->
             event.acceptTransferModes(*TransferMode.ANY)
-            if (!link.isVisible) link.isVisible = true
             link.setEnd(Point2D(event.x, event.y))
 
             event.consume()
         }
 
-        //конец кривой не лежит на другом ноде
         contextLinkDagDropped = EventHandler { event ->
             parent.onDragDropped = null
             parent.onDragOver = null
 
-            link.isVisible = false
             superParent!!.children.removeAt(0)
             Node.nodeDragged = null
 
@@ -404,13 +447,14 @@ class DraggableNode(link: String) : HBox() {
             Node.curvesNum--
         }
         Node.pool.forEach {
-            if(it.nextActionNode != null){
+            if(it.nextNode != null){
 
                 val link = NodeLink()
-                link.bindStartEnd(it, it.nextActionNode!!)
+                link.bindStartEnd(it, it.nextNode!!)
                 Node.curvesNum++
                 superParent!!.children.add(0, link)
             }
         }
     }
+
 }
